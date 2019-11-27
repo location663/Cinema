@@ -2,6 +2,7 @@
 *.class
 *.iml
 *.idea
+test/
 target/
 logs/
 
