@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-11-27
  */
 @RestController
-@RequestMapping("")
+@RequestMapping("film")
 public class FilmController {
 
     @Reference(interfaceClass = FilmService.class)
@@ -27,5 +27,8 @@ public class FilmController {
         String s = filmService.selectById(id);
         return s;
     }
+
+    @RequestMapping("/getFilms")
+
 }
 
