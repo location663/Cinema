@@ -28,7 +28,7 @@ public class FilmController {
         return s;
     }
 
-    @RequestMapping("/getFilms")
+//    @RequestMapping("/getFilms")
 
 }
 
