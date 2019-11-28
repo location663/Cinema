@@ -22,11 +22,6 @@ public class FilmController {
     @Reference(interfaceClass = FilmService.class)
     FilmService filmService;
 
-    @RequestMapping("query")
-    public String test(Integer id){
-        String s = filmService.selectById(id);
-        return s;
-    }
 
 //    @RequestMapping("/getFilms")
 
