@@ -51,12 +51,12 @@ public class FilmController {
         baseResponVO.setStatus(0);
         return baseResponVO;
     }
-<<<<<<< HEAD
+
 
     @RequestMapping("/getFilms")
     public BaseResponVO getFilms(Integer showType, Integer sortId, Integer catId, Integer sourceId, Integer yearId, Integer nowPage, Integer pageSize){
         BaseResponVO baseResponVO = filmService.listFilms(showType, sortId, catId, sourceId, yearId, nowPage, pageSize);
-=======
+
     @RequestMapping("getConditionList")
     public BaseResponVO getConditionList(){
         FilmConditionVo conditionVo = new FilmConditionVo();
@@ -66,7 +66,7 @@ public class FilmController {
         BaseResponVO baseResponVO = new BaseResponVO();
         baseResponVO.setData(conditionVo);
         baseResponVO.setStatus(0);
->>>>>>> db46466049680f999d56ca4a50a5117d88bd8062
+
         return baseResponVO;
     }
     /**
