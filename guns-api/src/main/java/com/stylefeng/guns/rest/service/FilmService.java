@@ -1,7 +1,7 @@
 package com.stylefeng.guns.rest.service;
-
 import com.stylefeng.guns.rest.vo.film.*;
-
+import com.stylefeng.guns.rest.vo.BaseResponVO;
+import com.stylefeng.guns.rest.vo.FilmRequestVO;
 import java.util.List;
 
 public interface FilmService {
@@ -14,4 +14,5 @@ public interface FilmService {
     List<CatVo> getCats();
     List<SourceVo> getSources();
     List<YearVo> getYears();
+    BaseResponVO listFilms(FilmRequestVO filmRequestVO);
 }
