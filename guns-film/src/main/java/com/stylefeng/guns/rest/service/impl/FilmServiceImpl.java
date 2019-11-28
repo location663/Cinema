@@ -3,12 +3,13 @@ package com.stylefeng.guns.rest.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmInfoTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmTMapper;
+import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmInfoT;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmT;
 import com.stylefeng.guns.rest.service.FilmService;
-import com.stylefeng.guns.rest.vo.BaseResponVO;
-import com.stylefeng.guns.rest.vo.FilmRequestVO;
-import com.stylefeng.guns.rest.vo.FilmsVO;
+import com.stylefeng.guns.rest.vo.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,9 @@ import java.util.Map;
 @Component
 @Service(interfaceClass = FilmService.class)
 public class FilmServiceImpl implements FilmService {
+
+    @Autowired
+    MtimeFilmInfoTMapper FilmInfoTMapper;
 
     @Autowired
     MtimeFilmTMapper filmTMapper;
@@ -61,6 +65,35 @@ public class FilmServiceImpl implements FilmService {
         return baseResponVO;
     }
 
+    /**
+     * 根据filmId查询film对象返回给Cinema
+     * @param filmId
+     * @return
+     */
+    @Override
+    public FilmForCinema getFilmByFilmId(Integer filmId) {
+        MtimeFilmT mtimeFilmT = filmTMapper.selectById(filmId);
+        FilmForCinema filmForCinema = new FilmForCinema();
+        BeanUtils.copyProperties(mtimeFilmT,filmForCinema);
+        return filmForCinema;
+    }
+
+    /**
+     * 根据filmId查询film info对象返回给Cinema
+     * @param filmId
+     * @return
+     */
+    @Override
+    public FilmInfoForCinema getFilmInfoByFilmId(Integer filmId) {
+        EntityWrapper<MtimeFilmInfoT> mtimeFilmInfoTEntityWrapper = new EntityWrapper<>();
+        mtimeFilmInfoTEntityWrapper.eq("film_id",filmId);
+        List<MtimeFilmInfoT> mtimeFilmInfoTS = FilmInfoTMapper.selectList(mtimeFilmInfoTEntityWrapper);
+
+        FilmInfoForCinema filmInfoForCinema = new FilmInfoForCinema();
+        BeanUtils.copyProperties(mtimeFilmInfoTS.get(0),filmInfoForCinema);
+        return filmInfoForCinema;
+    }
+
     private List<FilmsVO> trans2Films(List<Map<String, Object>> maps) {
         ArrayList<FilmsVO> filmsVOS = new ArrayList<>();
         for (Map<String, Object> map : maps) {
@@ -75,4 +108,6 @@ public class FilmServiceImpl implements FilmService {
         }
         return filmsVOS;
     }
+
+
 }
