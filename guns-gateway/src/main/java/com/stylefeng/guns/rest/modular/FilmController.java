@@ -3,6 +3,7 @@ package com.stylefeng.guns.rest.modular;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.service.FilmService;
+import com.stylefeng.guns.rest.vo.BaseResponVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,13 @@ public class FilmController {
         return s;
     }
 
-//    @RequestMapping("/getFilms")
+    @RequestMapping("/getFilms")
+    public BaseResponVO getFilms(Integer showType, Integer sortId, Integer catId
+            , Integer sourceId, Integer yearId, Integer nowPage, Integer pageSize){
+        BaseResponVO baseResponVO = filmService.listFilms(showType, sortId, catId
+                , sourceId, yearId, nowPage, pageSize);
+        return baseResponVO;
+    }
 
 }
 

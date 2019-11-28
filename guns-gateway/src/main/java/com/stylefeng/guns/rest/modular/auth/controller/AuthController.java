@@ -30,10 +30,11 @@ public class AuthController {
 
     @RequestMapping(value = "${jwt.auth-path}")
     public ResponseEntity<?> createAuthenticationToken(AuthRequest authRequest) {
-
+        // 验证账号密码
         boolean validate = reqValidator.validate(authRequest);
 
         if (validate) {
+            // 生成randomKey
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
             return ResponseEntity.ok(new AuthResponse(token, randomKey));

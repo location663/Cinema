@@ -5,9 +5,6 @@ import com.stylefeng.guns.rest.modular.auth.validator.dto.Credence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * 账号密码验证
  *
@@ -16,7 +13,6 @@ import java.util.Map;
  */
 @Service
 public class DbValidator implements IReqValidator {
-
 
     @Override
     public boolean validate(Credence credence) {
