@@ -34,7 +34,7 @@ public class AuthController {
     UserService userService;
 
     @RequestMapping(value = "${jwt.auth-path}")
-    public ResponseEntity<?> createAuthenticationToken(AuthRequest authRequest) throws CinemaParameterException {
+    public ResponseEntity<?> createAuthenticationToken(AuthRequest authRequest) {
 
 //        // 验证账号密码
 //        boolean validate = reqValidator.validate(authRequest);
