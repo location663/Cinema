@@ -2,11 +2,16 @@ package com.stylefeng.guns.rest.modular;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.common.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
-import org.springframework.stereotype.Controller;
+import com.stylefeng.guns.rest.vo.FilmRequestVO;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -21,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FilmController {
 
     @Reference(interfaceClass = FilmService.class)
-    FilmService filmService;
+    private FilmService filmService;
 
     @RequestMapping("query")
     public String test(Integer id){
@@ -29,12 +34,35 @@ public class FilmController {
         return s;
     }
 
+    /**
+     * 影片查询接口
+     * @param filmRequestVO
+     * @param bindingResult
+     * @return
+     */
     @RequestMapping("/getFilms")
-    public BaseResponVO getFilms(Integer showType, Integer sortId, Integer catId
-            , Integer sourceId, Integer yearId, Integer nowPage, Integer pageSize){
-        BaseResponVO baseResponVO = filmService.listFilms(showType, sortId, catId
-                , sourceId, yearId, nowPage, pageSize);
-        return baseResponVO;
+    public BaseResponVO getFilms(@Valid FilmRequestVO filmRequestVO, BindingResult bindingResult) throws CinemaParameterException {
+        if (bindingResult.hasErrors()){
+//            FieldError fieldError = bindingResult.getFieldError();
+//            String field = fieldError.getField();
+//            String defaultMessage = fieldError.getDefaultMessage();
+//            System.out.println(field);
+//            System.out.println(defaultMessage);
+//            BaseResponVO baseResponVO = new BaseResponVO();
+//            baseResponVO.setMsg(CinemaExceptionEnum.PARAMETER_ERROR.getMsg());
+//            baseResponVO.setStatus();
+
+            throw new CinemaParameterException();
+
+        }
+        return  filmService.listFilms(filmRequestVO);
+    }
+
+    @RequestMapping("/films/{filmInfo}")
+    public BaseResponVO filmDetailInfo(@PathVariable("filmInfo") String filmInfo, Integer searchType){
+
+//        filmService.filmDetailInfo
+        return null;
     }
 
 }
