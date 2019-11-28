@@ -7,4 +7,5 @@ import org.springframework.stereotype.Component;
 @Component
 @Service(interfaceClass = CinemaService.class)
 public class CinemaServiceImpl implements CinemaService {
+
 }
