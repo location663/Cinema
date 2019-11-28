@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class FilmInfoVO implements Serializable {
     private Integer filmId;
     private String filmName;
-    private String filmType;
+    private Integer filmType;
     private String imgAddress;
     private String filmCats;
     private Integer filmLength;
@@ -24,7 +24,7 @@ public class FilmInfoVO implements Serializable {
     public FilmInfoVO() {
     }
 
-    public FilmInfoVO(Integer filmId, String filmName, String filmType, String imgAddress, String filmCats, Integer filmLength) {
+    public FilmInfoVO(Integer filmId, String filmName, Integer filmType, String imgAddress, String filmCats, Integer filmLength) {
         this.filmId = filmId;
         this.filmName = filmName;
         this.filmType = filmType;
