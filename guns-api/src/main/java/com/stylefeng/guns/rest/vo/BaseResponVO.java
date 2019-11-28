@@ -24,4 +24,9 @@ public class BaseResponVO implements Serializable {
         this.totalPage = totalPage;
         this.msg = msg;
     }
+
+    public BaseResponVO(Integer status, String msg) {
+        this.status = status;
+        this.msg = msg;
+    }
 }
