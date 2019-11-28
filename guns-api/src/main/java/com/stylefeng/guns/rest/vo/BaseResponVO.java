@@ -2,8 +2,10 @@ package com.stylefeng.guns.rest.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class BaseResponVO {
+public class BaseResponVO implements Serializable {
     private Integer status;
     private String imgPre;
     private Object data;
