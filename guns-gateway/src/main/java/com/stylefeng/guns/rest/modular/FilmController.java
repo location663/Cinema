@@ -30,10 +30,8 @@ public class FilmController {
     }
 
     @RequestMapping("/getFilms")
-    public BaseResponVO getFilms(Integer showType, Integer sortId, Integer catId
-            , Integer sourceId, Integer yearId, Integer nowPage, Integer pageSize){
-        BaseResponVO baseResponVO = filmService.listFilms(showType, sortId, catId
-                , sourceId, yearId, nowPage, pageSize);
+    public BaseResponVO getFilms(Integer showType, Integer sortId, Integer catId, Integer sourceId, Integer yearId, Integer nowPage, Integer pageSize){
+        BaseResponVO baseResponVO = filmService.listFilms(showType, sortId, catId, sourceId, yearId, nowPage, pageSize);
         return baseResponVO;
     }
 

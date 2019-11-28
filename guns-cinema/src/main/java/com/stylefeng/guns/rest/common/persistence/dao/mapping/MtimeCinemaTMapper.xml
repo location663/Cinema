@@ -14,5 +14,14 @@
         <result column="cinema_address" property="cinemaAddress" />
         <result column="minimum_price" property="minimumPrice" />
     </resultMap>
+    <select id="getAreaConditionList" resultType="com.stylefeng.guns.rest.common.persistence.model.MtimeAreaDictT">
+        SELECT UUID,show_name FROM `mtime_brand_dict_t`;
+    </select>
+    <select id="getBrandConditionList" resultType="com.stylefeng.guns.rest.common.persistence.model.MtimeBrandDictT">
+        SELECT UUID,show_name FROM `mtime_area_dict_t`;
+    </select>
+    <select id="getHallCondition" resultType="com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT">
+        SELECT uuid,show_name,seat_address FROM `mtime_hall_dict_t`;
+    </select>
 
 </mapper>

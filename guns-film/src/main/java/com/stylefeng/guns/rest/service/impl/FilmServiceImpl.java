@@ -9,6 +9,7 @@ import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmT;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.FilmsVO;
+import com.stylefeng.guns.rest.vo.GetCinemasVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
