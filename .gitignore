@@ -17,6 +17,7 @@ logs/
 
 
 # Package Files #
+*.gz
 *.jar
 *.war
 *.ear
