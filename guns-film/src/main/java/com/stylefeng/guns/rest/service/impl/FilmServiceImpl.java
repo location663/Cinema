@@ -260,20 +260,21 @@ public class FilmServiceImpl implements FilmService {
         DirectorVO directorVO = new DirectorVO();
         directorVO.setDirectorName(directorDO.getActorName());
         directorVO.setImgAddress(directorDO.getActorImg());
-        EntityWrapper<MtimeFilmActorT> filmActorTEntityWrapper = new EntityWrapper<>();
-        filmActorTEntityWrapper.eq("film_id", id);
-        List<MtimeFilmActorT> mtimeFilmActorTS = filmActorTMapper.selectList(filmActorTEntityWrapper);
-        ArrayList<ActorVO> actorVOS = new ArrayList<>();
-        for (MtimeFilmActorT mtimeFilmActorT : mtimeFilmActorTS) {
-            ActorVO actorVO = new ActorVO();
-            MtimeActorT mtimeActorT = actorTMapper.selectById(mtimeFilmActorT.getActorId());
-            actorVO.setDirectorName(mtimeActorT.getActorName());
-            actorVO.setImgAddress(mtimeActorT.getActorImg());
-            actorVO.setRoleName(mtimeFilmActorT.getRoleName());
-            actorVOS.add(actorVO);
-        }
+//        EntityWrapper<MtimeFilmActorT> filmActorTEntityWrapper = new EntityWrapper<>();
+//        filmActorTEntityWrapper.eq("film_id", id);
+//        List<MtimeFilmActorT> mtimeFilmActorTS = filmActorTMapper.selectList(filmActorTEntityWrapper);
+//        ArrayList<ActorVO> actorVOS = new ArrayList<>();
+//        for (MtimeFilmActorT mtimeFilmActorT : mtimeFilmActorTS) {
+//            ActorVO actorVO = new ActorVO();
+//            MtimeActorT mtimeActorT = actorTMapper.selectById(mtimeFilmActorT.getActorId());
+//            actorVO.setDirectorName(mtimeActorT.getActorName());
+//            actorVO.setImgAddress(mtimeActorT.getActorImg());
+//            actorVO.setRoleName(mtimeFilmActorT.getRoleName());
+//            actorVOS.add(actorVO);
+//        }
+        List<ActorVO> actorVOS1 = listActorVOByFilmId(id);
         actorsVO.setDirector(directorVO);
-        actorsVO.setActors(actorVOS);
+        actorsVO.setActors(actorVOS1);
         infoRequestVO.setActors(actorsVO);
         filmDetailVO.setFilmId(filmT.getUuid().toString());
         ImgVO imgVO = parseString2ImgVO(filmInfoT.getFilmImgs());
@@ -298,6 +299,22 @@ public class FilmServiceImpl implements FilmService {
         return filmById;
     }
 
+    @Override
+    public List<ActorVO> listActorVOByFilmId(Integer filmId) {
+        EntityWrapper<MtimeFilmActorT> filmActorTEntityWrapper = new EntityWrapper<>();
+        filmActorTEntityWrapper.eq("film_id", filmId);
+        List<MtimeFilmActorT> mtimeFilmActorTS = filmActorTMapper.selectList(filmActorTEntityWrapper);
+        ArrayList<ActorVO> actorVOS = new ArrayList<>();
+        for (MtimeFilmActorT mtimeFilmActorT : mtimeFilmActorTS) {
+            ActorVO actorVO = new ActorVO();
+            MtimeActorT mtimeActorT = actorTMapper.selectById(mtimeFilmActorT.getActorId());
+            actorVO.setDirectorName(mtimeActorT.getActorName());
+            actorVO.setImgAddress(mtimeActorT.getActorImg());
+            actorVO.setRoleName(mtimeFilmActorT.getRoleName());
+            actorVOS.add(actorVO);
+        }
+        return actorVOS;
+    }
 
     /**
      * 根据filmId查询film对象返回给Cinema
