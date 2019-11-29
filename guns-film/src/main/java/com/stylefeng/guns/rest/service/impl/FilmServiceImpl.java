@@ -8,6 +8,7 @@ import com.stylefeng.guns.rest.common.exception.CinemaException;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmInfoTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.*;
 import com.stylefeng.guns.rest.common.persistence.model.*;
+import com.stylefeng.guns.rest.common.utils.TransferUtils;
 import com.stylefeng.guns.rest.util.Mtime2VoTrans;
 import com.stylefeng.guns.rest.vo.film.*;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmTMapper;
@@ -250,7 +251,7 @@ public class FilmServiceImpl implements FilmService {
         filmDetailVO.setInfo01(sb.toString());
         MtimeSourceDictT mtimeSourceDictT = sourceDictTMapper.selectById(filmT.getFilmSource());
         filmDetailVO.setInfo02(mtimeSourceDictT.getShowName() + " / " + filmInfoT.getFilmLength() + "分钟");
-        String s = parseDate2String(filmT.getFilmTime());
+        String s = TransferUtils.parseDate2String(filmT.getFilmTime());
         filmDetailVO.setInfo03(s + " " +  mtimeSourceDictT.getShowName() + " 上映");
 
         InfoRequestVO infoRequestVO = new InfoRequestVO();
@@ -374,10 +375,6 @@ public class FilmServiceImpl implements FilmService {
         return imgVO;
     }
 
-    private String parseDate2String(Date date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String format = simpleDateFormat.format(date);
-        return format;
-    }
+
 
 }
