@@ -1,12 +1,11 @@
-package com.stylefeng.guns.rest.common.exception;
+package com.stylefeng.guns.rest.exception;
 
 public enum CinemaExceptionEnum {
 
+    PARAMETER_ERROR(800, "参数异常"),
 
     USER_AUTH_ERROR(999,"系统出现异常，请联系管理员"),
-
-    PARAMETER_ERROR(800, "参数异常");
-
+    Business_ERROR(1,"业务异常");
 
 
     private Integer status;
