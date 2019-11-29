@@ -3,6 +3,7 @@ package com.stylefeng.guns.rest.common.aop;
 import com.stylefeng.guns.core.aop.BaseControllerExceptionHandler;
 import com.stylefeng.guns.core.base.tips.ErrorTip;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
+import com.stylefeng.guns.rest.common.exception.CinemaException;
 import com.stylefeng.guns.rest.common.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.common.exception.CinemaExceptionEnum;
 import com.stylefeng.guns.rest.vo.ErrorResponVO;
@@ -38,8 +39,15 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
 
     @ExceptionHandler(CinemaParameterException.class)
     @ResponseBody
-    public ErrorResponVO cinemaException(CinemaParameterException e){
+    public ErrorResponVO cinemaParameterException(CinemaParameterException e){
         return new ErrorResponVO(CinemaExceptionEnum.PARAMETER_ERROR.getStatus(), CinemaExceptionEnum.PARAMETER_ERROR.getMsg());
+    }
+
+    @ExceptionHandler(CinemaException.class)
+    @ResponseBody
+    public ErrorResponVO cinemaException(CinemaException e){
+        return new ErrorResponVO(e.getStatus(), e.getMsg());
+
     }
 
     @ExceptionHandler(Exception.class)

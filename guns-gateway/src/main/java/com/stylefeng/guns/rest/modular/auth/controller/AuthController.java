@@ -34,11 +34,12 @@ public class AuthController {
 
 //    @Resource(name = "simpleValidator")
 //    private IReqValidator reqValidator;
-    @Reference(check = false)
-    private UserService userService;
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Reference(interfaceClass = UserService.class, check = false)
+    private UserService userService;
 
     @RequestMapping(value = "${jwt.auth-path}")
     public BaseResponVO createAuthenticationToken(AuthRequest authRequest) {
