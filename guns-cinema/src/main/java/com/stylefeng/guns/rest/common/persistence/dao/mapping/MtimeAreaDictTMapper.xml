@@ -6,7 +6,7 @@
     <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeAreaDictT">
         <id column="UUID" property="areaId" />
         <result column="show_name" property="areaName" />
-        <!--<id column="active" property="active"/>-->
+        <!--<result column="active" property="active"/>-->
     </resultMap>
     <select id="getAreaConditionList" resultMap="BaseResultMap">
         SELECT UUID,show_name FROM `mtime_brand_dict_t`;

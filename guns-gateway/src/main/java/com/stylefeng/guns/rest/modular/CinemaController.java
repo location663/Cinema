@@ -18,15 +18,31 @@ import com.alibaba.dubbo.config.annotation.Reference;
 @RequestMapping("cinema")
 public class CinemaController {
 
-    @Reference(interfaceClass = CinemaService.class)
+    @Reference(interfaceClass = CinemaService.class,check = false)
     CinemaService cinemaService;
 
+    /**
+     *
+     * @param brandId  影院编号
+     * @param hallType 影厅类型
+     * @param districtId 行政区编号
+     * @param pageSize 每页条数
+     * @param nowPage 当前页数
+     * @return
+     */
     @RequestMapping("/getCinemas")
     public BaseResponVO getCinemas(Integer brandId, Integer hallType, Integer districtId,Integer pageSize,Integer nowPage){
         BaseResponVO baseResponVO = cinemaService.getCinemasList(brandId,hallType,districtId,pageSize,nowPage);
         return baseResponVO;
     }
 
+    /**
+     *
+     * @param brandId  影院编号
+     * @param hallType 影厅类型
+     * @param areaId   行政区编号
+     * @return
+     */
     @RequestMapping("/getCondition")
     public BaseResponVO getCondition(Integer brandId,Integer hallType,Integer areaId){
         BaseResponVO baseResponVO = cinemaService.getConditionList(brandId,hallType,areaId);

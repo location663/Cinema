@@ -7,6 +7,7 @@
         <id column="UUID" property="halltypeId" />
         <result column="show_name" property="halltypeName" />
         <result column="seat_address" property="seatAddress" />
+        <!--<result column="active" property="active"/>-->
     </resultMap>
     <select id="getHallCondition" resultMap="BaseResultMap">
         SELECT uuid,show_name,seat_address FROM `mtime_hall_dict_t`;

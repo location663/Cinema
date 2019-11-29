@@ -64,13 +64,14 @@ public class CinemaServiceImpl implements CinemaService {
         }
         Page<MtimeCinemaT> mtimeCinemaTPage = new Page<>();
         List<Map<String, Object>> listMaps = mtimeCinemaTMapper.selectMapsPage(mtimeCinemaTPage, mtimeCinemaTEntityWrapper);
+//        List<MtimeCinemaT> mtimeCinemaTS = mtimeCinemaTMapper.selectPage(mtimeCinemaTPage, mtimeCinemaTEntityWrapper);
         List<GetCinemasVo> cinemasVOs = trans2Films(listMaps);
         baseResponVO.setData(cinemasVOs);
         baseResponVO.setImgPre("http://img.meetingshop.cn/");
         baseResponVO.setMsg("");
         baseResponVO.setNowPage(nowPage);
         baseResponVO.setStatus(0);
-        baseResponVO.setTotalPage((int) Math.ceil(1.0*listMaps.size()/pageSize));
+        baseResponVO.setTotalPage((int) Math.ceil(1.0*cinemasVOs.size()/pageSize));
         return baseResponVO;
     }
 
