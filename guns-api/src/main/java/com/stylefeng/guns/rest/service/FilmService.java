@@ -4,7 +4,10 @@ import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.FilmRequestVO;
 
 public interface FilmService {
-    String selectById(Integer id);
 
-    BaseResponVO listFilms(FilmRequestVO filmRequestVO);
+    BaseResponVO listFilms(FilmRequestVO filmRequestVO) throws Exception;
+
+    BaseResponVO getFilmById(int id) throws Exception;
+
+    BaseResponVO getFilmByName(String name) throws Exception;
 }
