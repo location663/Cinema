@@ -24,7 +24,7 @@ import java.util.Map;
 @Service(interfaceClass = FilmService.class)
 public class FilmServiceImpl implements FilmService {
     @Autowired
-    MtimeFilmInfoTMapper FilmInfoTMapper;
+    MtimeFilmInfoTMapper filmInfoTMapper;
 
     @Autowired
     MtimeFilmTMapper filmTMapper;
@@ -217,7 +217,7 @@ public class FilmServiceImpl implements FilmService {
     public FilmInfoForCinema getFilmInfoByFilmId(Integer filmId) {
         EntityWrapper<MtimeFilmInfoT> mtimeFilmInfoTEntityWrapper = new EntityWrapper<>();
         mtimeFilmInfoTEntityWrapper.eq("film_id",filmId);
-        List<MtimeFilmInfoT> mtimeFilmInfoTS = FilmInfoTMapper.selectList(mtimeFilmInfoTEntityWrapper);
+        List<MtimeFilmInfoT> mtimeFilmInfoTS = filmInfoTMapper.selectList(mtimeFilmInfoTEntityWrapper);
 
         FilmInfoForCinema filmInfoForCinema = new FilmInfoForCinema();
         BeanUtils.copyProperties(mtimeFilmInfoTS.get(0),filmInfoForCinema);

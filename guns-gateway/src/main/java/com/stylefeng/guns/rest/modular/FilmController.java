@@ -27,7 +27,7 @@ import javax.validation.Valid;
 @RequestMapping("film")
 public class FilmController {
 
-    @Reference(interfaceClass = FilmService.class)
+    @Reference(interfaceClass = FilmService.class, check = false)
     private FilmService filmService;
 
     /**

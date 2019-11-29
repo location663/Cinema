@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("user")
 public class UserController {
 
-    @Reference(interfaceClass = UserService.class)
+    @Reference(interfaceClass = UserService.class, check = false)
     UserService userService;
 
     /**
