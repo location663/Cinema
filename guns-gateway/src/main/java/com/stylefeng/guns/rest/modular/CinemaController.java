@@ -1,6 +1,4 @@
 package com.stylefeng.guns.rest.modular;
-
-
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.common.exception.CinemaQueryFailException;
 import com.stylefeng.guns.rest.service.CinemaService;
@@ -8,8 +6,11 @@ import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.cinema.FieldInfo;
 import org.springframework.stereotype.Controller;
+import com.stylefeng.guns.rest.service.CinemaService;
+import com.stylefeng.guns.rest.vo.BaseResponVO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.alibaba.dubbo.config.annotation.Reference;
 
 /**
  * <p>
@@ -56,6 +57,16 @@ public class CinemaController {
         baseResponVO.setData(fieldInfo);
         baseResponVO.setImgPre("http://img.meetingshop.cn");
         baseResponVO.setStatus(0);
+
+    @RequestMapping("/getCinemas")
+    public BaseResponVO getCinemas(Integer brandId, Integer hallType, Integer districtId,Integer pageSize,Integer nowPage){
+        BaseResponVO baseResponVO = cinemaService.getCinemasList(brandId,hallType,districtId,pageSize,nowPage);
+        return baseResponVO;
+    }
+
+    @RequestMapping("/getCondition")
+    public BaseResponVO getCondition(Integer brandId,Integer hallType,Integer areaId){
+        BaseResponVO baseResponVO = cinemaService.getConditionList(brandId,hallType,areaId);
         return baseResponVO;
     }
 

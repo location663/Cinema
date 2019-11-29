@@ -1,11 +1,16 @@
-package com.stylefeng.guns.rest.common.exception;
+package com.stylefeng.guns.rest.exception;
 
 public enum CinemaExceptionEnum {
 
+    PARAMETER_ERROR(800, "参数异常"),
 
     USER_AUTH_ERROR(999,"系统出现异常，请联系管理员"),
+<<<<<<< HEAD:guns-gateway/src/main/java/com/stylefeng/guns/rest/common/exception/CinemaExceptionEnum.java
 
     PARAMETER_ERROR(800, "参数异常"),
+=======
+    Business_ERROR(1,"业务异常");
+>>>>>>> d0be29ca25432e9fb2e465ee21d9134c0114c76e:guns-api/src/main/java/com/stylefeng/guns/rest/exception/CinemaExceptionEnum.java
 
     CINEMA_QUERY_ERROR(1, "影院信息查询失败");
 

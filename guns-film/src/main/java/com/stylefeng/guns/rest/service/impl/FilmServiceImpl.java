@@ -1,26 +1,31 @@
 package com.stylefeng.guns.rest.service.impl;
-
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-
 import com.stylefeng.guns.rest.common.exception.CinemaException;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmInfoTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.*;
 import com.stylefeng.guns.rest.common.persistence.model.*;
+import com.stylefeng.guns.rest.exception.CinemaBusinessException;
 import com.stylefeng.guns.rest.util.Mtime2VoTrans;
 import com.stylefeng.guns.rest.vo.film.*;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmTMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmInfoT;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmT;
 import com.stylefeng.guns.rest.service.FilmService;
+import com.stylefeng.guns.rest.vo.BaseResponVO;
+import com.stylefeng.guns.rest.vo.FilmRequestVO;
+import com.stylefeng.guns.rest.vo.FilmsVO;
 import com.stylefeng.guns.rest.vo.*;
 import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+<<<<<<< HEAD
 import org.springframework.util.CollectionUtils;
 
+=======
+>>>>>>> d0be29ca25432e9fb2e465ee21d9134c0114c76e
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,7 +60,7 @@ public class FilmServiceImpl implements FilmService {
     MtimeActorTMapper actorTMapper;
 
     @Override
-    public List<BannerVo> getBanners() {
+    public List<BannerVo> getBanners(){
         List<MtimeBannerT> mtimeBannerS = bannerTMapper.selectList(null);
         List<BannerVo> list=new ArrayList<BannerVo>();
         for (MtimeBannerT mtimeBanner : mtimeBannerS) {
@@ -65,24 +70,26 @@ public class FilmServiceImpl implements FilmService {
             bannerVo.setBannerUrl(mtimeBanner.getBannerUrl());
             list.add(bannerVo);
         }
+        if(Collections.isEmpty(list)){
+            throw new CinemaBusinessException();
+        }
         return list;
     }
     //查询热映
 
     @Override
-    public FilmVo getHotFilms(boolean isLimit, int page) {
+    public FilmVo getHotFilms(boolean isLimit, int num) {
         //查询filminfo
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",1);
         List<MtimeFilmT> mtimeFilmTS;
         if(isLimit){
-            Page page1=new Page(1,page);
-            mtimeFilmTS= filmTMapper.selectPage(page1,filmTEntityWrapper);
+            Page page=new Page(1,num,"film_box_office");
+            mtimeFilmTS= filmTMapper.selectPage(page,filmTEntityWrapper);
         }
         else {
             mtimeFilmTS = filmTMapper.selectList(filmTEntityWrapper);
         }
-
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         int filmNum=mtimeFilmTS.size();
         FilmVo filmVo = new FilmVo();
@@ -92,14 +99,14 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public FilmVo getSoonFilms(boolean isLimit, int page) {
+    public FilmVo getSoonFilms(boolean isLimit, int num) {
         //查询filminfo
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",2);
         List<MtimeFilmT> mtimeFilmTS;
         if(isLimit){
-            Page page1=new Page(1,page);
-            mtimeFilmTS = filmTMapper.selectPage(page1, filmTEntityWrapper);
+            Page page=new Page(1,num,"film_preSaleNum");
+            mtimeFilmTS = filmTMapper.selectPage(page, filmTEntityWrapper);
         }
         else{
             mtimeFilmTS= filmTMapper.selectList(filmTEntityWrapper);
@@ -117,7 +124,7 @@ public class FilmServiceImpl implements FilmService {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",1);
         Page page=new Page(1,10,"film_box_office");
-        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectList(filmTEntityWrapper);
+        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectPage(page,filmTEntityWrapper);
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         return filmInfos;
     }
@@ -127,7 +134,7 @@ public class FilmServiceImpl implements FilmService {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",2);
         Page<MtimeFilmT> page=new Page<>(1,10,"film_preSaleNum");
-        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectList(filmTEntityWrapper);
+        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectPage(page,filmTEntityWrapper);
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         return filmInfos;
     }
@@ -137,7 +144,7 @@ public class FilmServiceImpl implements FilmService {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",3);
         Page<MtimeFilmT> page=new Page<>(1,10,"film_score");
-        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectList(filmTEntityWrapper);
+        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectPage(page,filmTEntityWrapper);
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         return filmInfos;
     }

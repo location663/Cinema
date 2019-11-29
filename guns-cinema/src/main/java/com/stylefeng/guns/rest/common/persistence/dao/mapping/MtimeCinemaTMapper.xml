@@ -14,5 +14,4 @@
         <result column="cinema_address" property="cinemaAddress" />
         <result column="minimum_price" property="minimumPrice" />
     </resultMap>
-
 </mapper>
