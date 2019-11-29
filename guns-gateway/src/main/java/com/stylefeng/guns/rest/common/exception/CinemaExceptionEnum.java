@@ -5,7 +5,9 @@ public enum CinemaExceptionEnum {
 
     USER_AUTH_ERROR(999,"系统出现异常，请联系管理员"),
 
-    PARAMETER_ERROR(800, "参数异常");
+    PARAMETER_ERROR(800, "参数异常"),
+
+    TOKEN_ERROR(1, "退出失败，用户尚未登陆");
 
 
 
