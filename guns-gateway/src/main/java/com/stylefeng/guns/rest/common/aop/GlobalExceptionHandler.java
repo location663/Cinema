@@ -52,7 +52,7 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ErrorResponVO systemException(Exception e){
-        return new ErrorResponVO(CinemaExceptionEnum.SYSTEM_ERROR.getStatus(), CinemaExceptionEnum.SYSTEM_ERROR.getMsg());
+    public ErrorResponVO Exception(Exception e){
+        return new ErrorResponVO(CinemaExceptionEnum.USER_AUTH_ERROR.getStatus(), CinemaExceptionEnum.USER_AUTH_ERROR.getMsg());
     }
 }
