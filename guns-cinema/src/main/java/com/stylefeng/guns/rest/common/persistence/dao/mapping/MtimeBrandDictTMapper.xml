@@ -4,8 +4,11 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeBrandDictT">
-        <id column="UUID" property="uuid" />
-        <result column="show_name" property="showName" />
+        <id column="UUID" property="brandId" />
+        <result column="show_name" property="brandName" />
     </resultMap>
+    <select id="getBrandConditionList" resultMap="BaseResultMap">
+        SELECT UUID,show_name FROM `mtime_area_dict_t`;
+    </select>
 
 </mapper>

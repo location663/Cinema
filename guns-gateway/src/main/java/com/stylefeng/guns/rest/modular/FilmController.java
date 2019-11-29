@@ -50,6 +50,9 @@ public class FilmController {
         baseResponVO.setStatus(0);
         return baseResponVO;
     }
+
+
+
     @RequestMapping("getConditionList")
     public BaseResponVO getConditionList(){
         FilmConditionVo conditionVo = new FilmConditionVo();

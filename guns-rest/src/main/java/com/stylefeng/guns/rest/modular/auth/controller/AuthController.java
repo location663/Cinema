@@ -34,8 +34,10 @@ public class AuthController {
         boolean validate = reqValidator.validate(authRequest);
 
         if (validate) {
+
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
+
             return ResponseEntity.ok(new AuthResponse(token, randomKey));
         } else {
             throw new GunsException(BizExceptionEnum.AUTH_REQUEST_ERROR);
