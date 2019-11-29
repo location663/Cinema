@@ -19,7 +19,7 @@ public class RedisConfig {
 
     @Bean
     public Jedis jedis(){
-        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Jedis jedis = new Jedis("0.0.0.0", 6379);
 
         return jedis;
     }
