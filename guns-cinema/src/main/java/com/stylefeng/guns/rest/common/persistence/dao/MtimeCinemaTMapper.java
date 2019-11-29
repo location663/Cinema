@@ -18,10 +18,4 @@ import java.util.ArrayList;
  */
 public interface MtimeCinemaTMapper extends BaseMapper<MtimeCinemaT> {
 
-    ArrayList<MtimeAreaDictT> getAreaConditionList();
-
-    ArrayList<MtimeBrandDictT> getBrandConditionList();
-
-    ArrayList<MtimeHallDictT> getHallCondition();
-
 }
