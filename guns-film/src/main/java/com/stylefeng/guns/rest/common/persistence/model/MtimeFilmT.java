@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 
 /**
@@ -80,6 +82,7 @@ public class MtimeFilmT extends Model<MtimeFilmT> {
      * 影片上映时间
      */
     @TableField("film_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date filmTime;
     /**
      * 影片状态,1-正在热映，2-即将上映，3-经典影片
