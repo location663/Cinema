@@ -119,7 +119,7 @@ public class FilmServiceImpl implements FilmService {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",1);
         Page page=new Page(1,10,"film_box_office");
-        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectList(filmTEntityWrapper);
+        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectPage(page,filmTEntityWrapper);
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         return filmInfos;
     }
@@ -129,7 +129,7 @@ public class FilmServiceImpl implements FilmService {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",2);
         Page<MtimeFilmT> page=new Page<>(1,10,"film_preSaleNum");
-        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectList(filmTEntityWrapper);
+        List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectPage(page,filmTEntityWrapper);
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         return filmInfos;
     }
