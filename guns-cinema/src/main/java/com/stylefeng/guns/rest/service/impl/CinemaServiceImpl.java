@@ -13,6 +13,7 @@ import com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeHallFilmInfoT;
 import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.service.FilmService;
+import com.stylefeng.guns.rest.vo.ActorVO;
 import com.stylefeng.guns.rest.vo.FilmForCinema;
 import com.stylefeng.guns.rest.vo.FilmInfoForCinema;
 import com.stylefeng.guns.rest.vo.cinema.*;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Service(interfaceClass = CinemaService.class)
@@ -117,15 +120,40 @@ public class CinemaServiceImpl implements CinemaService {
         //封装 filmList
         List<FilmInfoVO> filmList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(mtimeFieldTS)){  //判断mtimeFieldTS 非空
+            Set set = new HashSet();
+            for (MtimeFieldT mtimeFieldT : mtimeFieldTS) {
+                if (set.add(mtimeFieldT.getFilmId())) {
+                    //根据放映场次查询播放的电影编号，然后根据电影编号获取对应的电影信息
+                    FilmForCinema filmByFilmId = filmService.getFilmByFilmId(mtimeFieldT.getFilmId());
+                    FilmInfoForCinema filmInfoByFilmId = filmService.getFilmInfoByFilmId(mtimeFieldT.getFilmId());//同上
+                    //封装filmInfo
+                    FilmInfoVO filmInfoVO = new FilmInfoVO();
+                    filmInfoVO.setFilmId(mtimeFieldT.getFilmId());
+                    filmInfoVO.setFilmName(filmByFilmId.getFilmName());
+                    filmInfoVO.setFilmType(filmByFilmId.getFilmType());
+                    filmInfoVO.setImgAddress(filmByFilmId.getImgAddress());
+                    filmInfoVO.setFilmCats(filmByFilmId.getFilmCats());
+                    filmInfoVO.setFilmLength(filmInfoByFilmId.getFilmLength());
+
+                    List<ActorVO> actorVOS = filmService.listActorVOByFilmId(mtimeFieldT.getFilmId());
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (ActorVO actorVO : actorVOS) {
+                        stringBuilder.append(actorVO.getDirectorName()).append(",");
+                    }
+                    stringBuilder.deleteCharAt(stringBuilder.length()-1);
+                    filmInfoVO.setActors(stringBuilder.toString());
+
+                    filmList.add(filmInfoVO);
+                }
+            }
 
             for (MtimeFieldT mtimeFieldT : mtimeFieldTS) {
-
                 //根据放映场次查询播放的电影编号，然后根据电影编号获取对应的电影信息
                 FilmForCinema filmByFilmId = filmService.getFilmByFilmId(mtimeFieldT.getFilmId());
                 FilmInfoForCinema filmInfoByFilmId = filmService.getFilmInfoByFilmId(mtimeFieldT.getFilmId());//同上
 
                 //根据场次id获取 filmField
-                MtimeHallDictT mtimeHallDictT = mtimeHallDictTMapper.selectById(mtimeFieldT.getHallId());
+                //MtimeHallDictT mtimeHallDictT = mtimeHallDictTMapper.selectById(mtimeFieldT.getHallId());
                 FilmFieldVO filmFieldVO = new FilmFieldVO();
                 filmFieldVO.setBeginTime(mtimeFieldT.getBeginTime());
                 filmFieldVO.setEndTime(mtimeFieldT.getEndTime());
@@ -139,8 +167,15 @@ public class CinemaServiceImpl implements CinemaService {
                     filmFieldVO.setLanguage(mtimeHallFilmInfoTS.get(0).getFilmLanguage());
                 }
 
+                if (!CollectionUtils.isEmpty(filmList)) {  //判断mtimeFieldTS 非空
+                    for (FilmInfoVO filmInfoVO : filmList) {
+                        if (filmInfoVO.getFilmId().equals(mtimeFieldT.getFilmId())){
+                            filmInfoVO.getFilmFields().add(filmFieldVO);//封装 filmFields
+                        }
+                    }
+                }
                 //封装filmInfo
-                FilmInfoVO filmInfoVO = new FilmInfoVO();
+                /*FilmInfoVO filmInfoVO = new FilmInfoVO();
                 filmInfoVO.setFilmId(mtimeFieldT.getFilmId());
                 filmInfoVO.setFilmName(filmByFilmId.getFilmName());
                 filmInfoVO.setFilmType(filmByFilmId.getFilmType());
@@ -148,10 +183,16 @@ public class CinemaServiceImpl implements CinemaService {
                 filmInfoVO.setFilmCats(filmByFilmId.getFilmCats());
                 filmInfoVO.setFilmLength(filmInfoByFilmId.getFilmLength());
 
-                
-                filmInfoVO.setActors();
-                filmInfoVO.getFilmFields().add(filmFieldVO);//封装 filmFields
-                filmList.add(filmInfoVO);
+                List<ActorVO> actorVOS = filmService.listActorVOByFilmId(mtimeFieldT.getFilmId());
+                StringBuilder stringBuilder = new StringBuilder();
+                for (ActorVO actorVO : actorVOS) {
+                    stringBuilder.append(actorVO.getDirectorName()).append(",");
+                }
+                stringBuilder.deleteCharAt(stringBuilder.length()-1);
+                filmInfoVO.setActors(stringBuilder.toString());*/
+
+                //filmInfoVO.getFilmFields().add(filmFieldVO);//封装 filmFields
+                //filmList.add(filmInfoVO);
             }
         }
 

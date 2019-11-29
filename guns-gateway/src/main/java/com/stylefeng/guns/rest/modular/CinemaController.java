@@ -52,6 +52,9 @@ public class CinemaController {
     public BaseResponVO getFields(Integer cinemaId){
         FieldInfo fieldInfo = cinemaService.getFields(cinemaId);
         BaseResponVO baseResponVO = new BaseResponVO();
+        if (fieldInfo==null){
+
+        }
         baseResponVO.setData(fieldInfo);
         baseResponVO.setImgPre("http://img.meetingshop.cn");
         baseResponVO.setStatus(0);
