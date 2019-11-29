@@ -14,13 +14,30 @@
         <result column="cinema_address" property="cinemaAddress" />
         <result column="minimum_price" property="minimumPrice" />
     </resultMap>
-    <select id="getAreaConditionList" resultType="com.stylefeng.guns.rest.common.persistence.model.MtimeAreaDictT">
+    <resultMap id="AreaMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeAreaDictT">
+        <id column="UUID" property="areaId"/>
+        <id column="show_name" property="areaName"/>
+        <!--<id column="active" property="active"/>-->
+    </resultMap>
+    <select id="getAreaConditionList" resultMap="AreaMap">
         SELECT UUID,show_name FROM `mtime_brand_dict_t`;
     </select>
-    <select id="getBrandConditionList" resultType="com.stylefeng.guns.rest.common.persistence.model.MtimeBrandDictT">
+
+    <resultMap id="BrandMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeBrandDictT">
+        <id column="UUId" property="brandId"/>
+        <id column="show_name" property="brandName"/>
+        <!--<id column="active" property="active"/>-->
+    </resultMap>
+    <select id="getBrandConditionList" resultMap="BrandMap">
         SELECT UUID,show_name FROM `mtime_area_dict_t`;
     </select>
-    <select id="getHallCondition" resultType="com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT">
+    <resultMap id="HallMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT">
+        <id column="UUID" property="halltypeId"/>
+        <id column="show_name" property="halltypeName"/>
+        <id column="seat_address" property="seatAddress"/>
+        <!--<id column="active" property="active"/>-->
+    </resultMap>
+    <select id="getHallCondition" resultMap="HallMap">
         SELECT uuid,show_name,seat_address FROM `mtime_hall_dict_t`;
     </select>
 
