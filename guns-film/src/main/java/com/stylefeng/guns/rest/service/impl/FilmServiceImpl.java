@@ -12,14 +12,10 @@ import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmTMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmInfoT;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmT;
 import com.stylefeng.guns.rest.service.FilmService;
-<<<<<<< HEAD
 import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.FilmsVO;
-import com.stylefeng.guns.rest.vo.GetCinemasVo;
-=======
 import com.stylefeng.guns.rest.vo.*;
 import org.springframework.beans.BeanUtils;
->>>>>>> db46466049680f999d56ca4a50a5117d88bd8062
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -42,6 +38,8 @@ public class FilmServiceImpl implements FilmService {
     MtimeYearDictTMapper yearDictTMapper;
     @Autowired
     MtimeSourceDictTMapper sourceDictTMapper;
+
+
     @Override
     public List<BannerVo> getBanners() {
         List<MtimeBannerT> mtimeBannerS = bannerTMapper.selectList(null);

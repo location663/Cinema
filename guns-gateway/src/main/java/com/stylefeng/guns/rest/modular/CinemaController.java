@@ -21,13 +21,13 @@ public class CinemaController {
     @Reference(interfaceClass = CinemaService.class)
     CinemaService cinemaService;
 
-    @RequestMapping("getCinemas")
+    @RequestMapping("/getCinemas")
     public BaseResponVO getCinemas(Integer brandId, Integer hallType, Integer districtId,Integer pageSize,Integer nowPage){
         BaseResponVO baseResponVO = cinemaService.getCinemasList(brandId,hallType,districtId,pageSize,nowPage);
         return baseResponVO;
     }
 
-    @RequestMapping("getCondition")
+    @RequestMapping("/getCondition")
     public BaseResponVO getCondition(Integer brandId,Integer hallType,Integer areaId){
         BaseResponVO baseResponVO = cinemaService.getConditionList(brandId,hallType,areaId);
         return baseResponVO;
