@@ -27,7 +27,7 @@ import javax.validation.Valid;
 @RequestMapping("film")
 public class FilmController {
 
-    @Reference(interfaceClass = FilmService.class)
+    @Reference(interfaceClass = FilmService.class, check=false)
     private FilmService filmService;
 
     /**
@@ -62,6 +62,7 @@ public class FilmController {
         baseResponVO.setStatus(0);
         return baseResponVO;
     }
+
     /**
      * 影片查询接口
      * @param filmRequestVO
@@ -69,7 +70,7 @@ public class FilmController {
      * @return
      */
     @RequestMapping("/getFilms")
-    public BaseResponVO getFilms(@Valid FilmRequestVO filmRequestVO, BindingResult bindingResult) throws CinemaParameterException {
+    public BaseResponVO getFilms(@Valid FilmRequestVO filmRequestVO, BindingResult bindingResult) throws Exception {
         if (bindingResult.hasErrors()){
 //            FieldError fieldError = bindingResult.getFieldError();
 //            String field = fieldError.getField();
@@ -87,10 +88,16 @@ public class FilmController {
     }
 
     @RequestMapping("/films/{filmInfo}")
-    public BaseResponVO filmDetailInfo(@PathVariable("filmInfo") String filmInfo, Integer searchType){
-
-//        filmService.filmDetailInfo
-        return null;
+    public BaseResponVO filmDetailInfo(@PathVariable("filmInfo") String filmInfo, Integer searchType) throws Exception {
+        BaseResponVO baseResponVO = null;
+        if (0 == searchType && filmInfo.matches("^[1-9]\\d*$")){
+            baseResponVO = filmService.getFilmById(Integer.parseInt(filmInfo));
+        } else if (1 == searchType) {
+            baseResponVO = filmService.getFilmByName(filmInfo);
+        } else {
+            throw new CinemaParameterException();
+        }
+        return baseResponVO;
     }
 
 }
