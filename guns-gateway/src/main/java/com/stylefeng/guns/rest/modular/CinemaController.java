@@ -2,6 +2,7 @@ package com.stylefeng.guns.rest.modular;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.common.exception.CinemaQueryFailException;
 import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
@@ -49,12 +50,9 @@ public class CinemaController {
      * @return
      */
     @RequestMapping("getFields")
-    public BaseResponVO getFields(Integer cinemaId){
+    public BaseResponVO getFields(Integer cinemaId) throws Exception {
         FieldInfo fieldInfo = cinemaService.getFields(cinemaId);
         BaseResponVO baseResponVO = new BaseResponVO();
-        if (fieldInfo==null){
-
-        }
         baseResponVO.setData(fieldInfo);
         baseResponVO.setImgPre("http://img.meetingshop.cn");
         baseResponVO.setStatus(0);

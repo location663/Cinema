@@ -19,6 +19,7 @@ import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -325,7 +326,9 @@ public class FilmServiceImpl implements FilmService {
     public FilmForCinema getFilmByFilmId(Integer filmId) {
         MtimeFilmT mtimeFilmT = filmTMapper.selectById(filmId);
         FilmForCinema filmForCinema = new FilmForCinema();
-        BeanUtils.copyProperties(mtimeFilmT,filmForCinema);
+        if (null != mtimeFilmT) {
+            BeanUtils.copyProperties(mtimeFilmT, filmForCinema);
+        }
         return filmForCinema;
     }
 
@@ -341,7 +344,9 @@ public class FilmServiceImpl implements FilmService {
         List<MtimeFilmInfoT> mtimeFilmInfoTS = filmInfoTMapper.selectList(mtimeFilmInfoTEntityWrapper);
 
         FilmInfoForCinema filmInfoForCinema = new FilmInfoForCinema();
-        BeanUtils.copyProperties(mtimeFilmInfoTS.get(0),filmInfoForCinema);
+        if (!CollectionUtils.isEmpty(mtimeFilmInfoTS)){
+            BeanUtils.copyProperties(mtimeFilmInfoTS.get(0),filmInfoForCinema);
+        }
         return filmInfoForCinema;
     }
 

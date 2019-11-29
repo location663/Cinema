@@ -3,6 +3,7 @@ package com.stylefeng.guns.rest.service.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.stylefeng.guns.rest.common.exception.CinemaQueryFailException;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeCinemaTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFieldTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeHallDictTMapper;
@@ -106,7 +107,7 @@ public class CinemaServiceImpl implements CinemaService {
      * @return
      */
     @Override
-    public FieldInfo getFields(Integer cinemaId) {
+    public FieldInfo getFields(Integer cinemaId) throws CinemaQueryFailException {
         FieldInfo fieldInfo = new FieldInfo();
 
         //封装 cinemaInfo
@@ -116,6 +117,9 @@ public class CinemaServiceImpl implements CinemaService {
         EntityWrapper<MtimeFieldT> fieldTEntityWrapper = new EntityWrapper<MtimeFieldT>();
         fieldTEntityWrapper.eq("cinema_id",cinemaId);
         List<MtimeFieldT> mtimeFieldTS = mtimeFieldTMapper.selectList(fieldTEntityWrapper);
+        if (mtimeFieldTS == null){
+            throw new CinemaQueryFailException();
+        }
 
         //封装 filmList
         List<FilmInfoVO> filmList = new ArrayList<>();
@@ -126,31 +130,42 @@ public class CinemaServiceImpl implements CinemaService {
                     //根据放映场次查询播放的电影编号，然后根据电影编号获取对应的电影信息
                     FilmForCinema filmByFilmId = filmService.getFilmByFilmId(mtimeFieldT.getFilmId());
                     FilmInfoForCinema filmInfoByFilmId = filmService.getFilmInfoByFilmId(mtimeFieldT.getFilmId());//同上
-                    //封装filmInfo
-                    FilmInfoVO filmInfoVO = new FilmInfoVO();
-                    filmInfoVO.setFilmId(mtimeFieldT.getFilmId());
-                    filmInfoVO.setFilmName(filmByFilmId.getFilmName());
-                    filmInfoVO.setFilmType(filmByFilmId.getFilmType());
-                    filmInfoVO.setImgAddress(filmByFilmId.getImgAddress());
-                    filmInfoVO.setFilmCats(filmByFilmId.getFilmCats());
-                    filmInfoVO.setFilmLength(filmInfoByFilmId.getFilmLength());
 
-                    List<ActorVO> actorVOS = filmService.listActorVOByFilmId(mtimeFieldT.getFilmId());
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (ActorVO actorVO : actorVOS) {
-                        stringBuilder.append(actorVO.getDirectorName()).append(",");
+                    if (filmByFilmId.getUuid() != null) {
+                        //封装filmInfo
+                        FilmInfoVO filmInfoVO = new FilmInfoVO();
+                        filmInfoVO.setFilmId(mtimeFieldT.getFilmId());
+                        filmInfoVO.setFilmName(filmByFilmId.getFilmName());
+                        filmInfoVO.setFilmType(filmByFilmId.getFilmType());
+                        filmInfoVO.setImgAddress(filmByFilmId.getImgAddress());
+                        filmInfoVO.setFilmCats(filmByFilmId.getFilmCats());
+                        filmInfoVO.setFilmLength(filmInfoByFilmId.getFilmLength());
+
+                        List<ActorVO> actorVOS = filmService.listActorVOByFilmId(mtimeFieldT.getFilmId());
+                        StringBuilder stringBuilder = new StringBuilder();
+                        if (!CollectionUtils.isEmpty(actorVOS)) {
+                            for (ActorVO actorVO : actorVOS) {
+                                stringBuilder.append(actorVO.getDirectorName()).append(",");
+                            }
+                            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                            filmInfoVO.setActors(stringBuilder.toString());
+                        }
+                        filmList.add(filmInfoVO);
                     }
-                    stringBuilder.deleteCharAt(stringBuilder.length()-1);
-                    filmInfoVO.setActors(stringBuilder.toString());
+                }
+            }
 
-                    filmList.add(filmInfoVO);
+            if (!CollectionUtils.isEmpty(filmList)) {  //判断mtimeFieldTS 非空
+                for (FilmInfoVO filmInfoVO : filmList) {
+                    List<FilmFieldVO> list = new ArrayList<>();
+                    filmInfoVO.setFilmFields(list);  //先设置这个属性为一个空List
                 }
             }
 
             for (MtimeFieldT mtimeFieldT : mtimeFieldTS) {
                 //根据放映场次查询播放的电影编号，然后根据电影编号获取对应的电影信息
-                FilmForCinema filmByFilmId = filmService.getFilmByFilmId(mtimeFieldT.getFilmId());
-                FilmInfoForCinema filmInfoByFilmId = filmService.getFilmInfoByFilmId(mtimeFieldT.getFilmId());//同上
+//                FilmForCinema filmByFilmId = filmService.getFilmByFilmId(mtimeFieldT.getFilmId());
+//                FilmInfoForCinema filmInfoByFilmId = filmService.getFilmInfoByFilmId(mtimeFieldT.getFilmId());//同上
 
                 //根据场次id获取 filmField
                 //MtimeHallDictT mtimeHallDictT = mtimeHallDictTMapper.selectById(mtimeFieldT.getHallId());
