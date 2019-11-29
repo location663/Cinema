@@ -57,6 +57,8 @@ public class CinemaController {
         baseResponVO.setData(fieldInfo);
         baseResponVO.setImgPre("http://img.meetingshop.cn");
         baseResponVO.setStatus(0);
+        return baseResponVO;
+    }
 
     @RequestMapping("/getCinemas")
     public BaseResponVO getCinemas(Integer brandId, Integer hallType, Integer districtId,Integer pageSize,Integer nowPage){
