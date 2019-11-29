@@ -10,6 +10,7 @@ package com.stylefeng.guns.rest.vo.cinema;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class FieldInfo implements Serializable {
@@ -19,12 +20,17 @@ public class FieldInfo implements Serializable {
 
     private HallInfoVO hallInfo;
 
+    private List<FilmInfoVO> filmList;
+
+
+
     public FieldInfo() {
     }
 
-    public FieldInfo(FilmInfoVO filmInfo, CinemaInfoVO cinemaInfo, HallInfoVO hallInfo) {
+    public FieldInfo(FilmInfoVO filmInfo, CinemaInfoVO cinemaInfo, HallInfoVO hallInfo, List<FilmInfoVO> filmList) {
         this.filmInfo = filmInfo;
         this.cinemaInfo = cinemaInfo;
         this.hallInfo = hallInfo;
+        this.filmList = filmList;
     }
 }

@@ -3,6 +3,8 @@ package com.stylefeng.guns.rest.common.persistence.dao;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeBrandDictT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.util.ArrayList;
+
 /**
  * <p>
  * 品牌信息表 Mapper 接口
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface MtimeBrandDictTMapper extends BaseMapper<MtimeBrandDictT> {
 
+    ArrayList<MtimeBrandDictT> getBrandConditionList();
 }

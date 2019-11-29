@@ -4,9 +4,12 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT">
-        <id column="UUID" property="uuid" />
-        <result column="show_name" property="showName" />
+        <id column="UUID" property="halltypeId" />
+        <result column="show_name" property="halltypeName" />
         <result column="seat_address" property="seatAddress" />
     </resultMap>
+    <select id="getHallCondition" resultMap="BaseResultMap">
+        SELECT uuid,show_name,seat_address FROM `mtime_hall_dict_t`;
+    </select>
 
 </mapper>

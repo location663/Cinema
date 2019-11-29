@@ -119,7 +119,7 @@ public class JwtTokenUtil {
      * 生成token
      */
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-        final Date createdDate = new Date();
+        final Date createdDate = new Date(); // 获取当前时间相对毫秒数 + 下面这个是过期时间的毫秒数 7*24*3600 *1000 为相对1970的毫秒数
         final Date expirationDate = new Date(createdDate.getTime() + jwtProperties.getExpiration() * 1000);
 
         return Jwts.builder()
