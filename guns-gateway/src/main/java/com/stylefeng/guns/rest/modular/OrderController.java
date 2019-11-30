@@ -1,7 +1,5 @@
 package com.stylefeng.guns.rest.modular;
 
-<<<<<<< HEAD
-=======
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.core.support.HttpKit;
 import com.stylefeng.guns.rest.service.OrderService;
@@ -9,7 +7,6 @@ import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
->>>>>>> 307eefe33bad97c0afbf1cff235444d88425455c
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("order")
 public class OrderController {
 
-<<<<<<< HEAD
-=======
+
     @Reference(interfaceClass = OrderService.class, check = false)
     private OrderService orderService;
 
@@ -41,5 +37,5 @@ public class OrderController {
         BaseResponVO baseResponVO = orderService.getOrderInfo(nowPage,pageSize,userVO);
         return baseResponVO;
     }
->>>>>>> 307eefe33bad97c0afbf1cff235444d88425455c
+
 }
