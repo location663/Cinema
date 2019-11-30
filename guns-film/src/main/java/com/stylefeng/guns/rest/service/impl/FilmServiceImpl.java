@@ -212,6 +212,12 @@ public class FilmServiceImpl implements FilmService {
         } else if (3 == filmRequestVO.getSortId()) {
             mtimeFilmTEntityWrapper.orderBy(false, "film_score");
         }
+        if (null == filmRequestVO.getNowPage()){
+            filmRequestVO.setNowPage(1);
+        }
+        if (null == filmRequestVO.getPageSize()){
+            filmRequestVO.setPageSize(18);
+        }
         Page<MtimeFilmT> mtimeFilmTPage = new Page(filmRequestVO.getNowPage(), filmRequestVO.getPageSize());
         List<Map<String, Object>> maps = filmTMapper.selectMapsPage(mtimeFilmTPage, mtimeFilmTEntityWrapper);
         List<FilmsVO> res = trans2Films(maps);
