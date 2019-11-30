@@ -174,7 +174,7 @@ public class CinemaServiceImpl implements CinemaService {
 
         //封装hallInfo
         HallInfoVO hallInfoVO = new HallInfoVO();
-        MtimeHallDictT mtimeHallDictT = mtimeHallDictTMapper.selectById(mtimeFieldT.getHallId());
+        MtimeHallDictT mtimeHallDictT = mtimeHallDictTMapper.selectById(mtimeFieldT.getHallId());//
         hallInfoVO.setHallFieldId(mtimeFieldT.getHallId());
         hallInfoVO.setHallName(mtimeFieldT.getHallName());
         hallInfoVO.setPrice(mtimeFieldT.getPrice());
@@ -191,11 +191,13 @@ public class CinemaServiceImpl implements CinemaService {
     private CinemaInfoVO getCinemaInfoVOByCinemaId(Integer cinemaId) {
         CinemaInfoVO cinemaInfoVO = new CinemaInfoVO();
         MtimeCinemaT mtimeCinemaT = mtimeCinemaTMapper.selectById(cinemaId);//根据影院编号获取影院对象信息
-        cinemaInfoVO.setCinemaId(mtimeCinemaT.getUuid());
-        cinemaInfoVO.setCinemaName(mtimeCinemaT.getCinemaName());
-        cinemaInfoVO.setCinemaAdress(mtimeCinemaT.getCinemaAddress());
-        cinemaInfoVO.setCinemaPhone(mtimeCinemaT.getCinemaPhone());
-        cinemaInfoVO.setImgUrl(mtimeCinemaT.getImgAddress());
+        if (mtimeCinemaT!=null){
+            cinemaInfoVO.setCinemaId(mtimeCinemaT.getUuid());//
+            cinemaInfoVO.setCinemaName(mtimeCinemaT.getCinemaName());
+            cinemaInfoVO.setCinemaAdress(mtimeCinemaT.getCinemaAddress());
+            cinemaInfoVO.setCinemaPhone(mtimeCinemaT.getCinemaPhone());
+            cinemaInfoVO.setImgUrl(mtimeCinemaT.getImgAddress());
+        }
         return cinemaInfoVO;
     }
 
@@ -237,7 +239,13 @@ public class CinemaServiceImpl implements CinemaService {
                         filmInfoVO.setFilmName(filmByFilmId.getFilmName());
                         filmInfoVO.setFilmType(filmByFilmId.getFilmType());
                         filmInfoVO.setImgAddress(filmByFilmId.getImgAddress());
-                        filmInfoVO.setFilmCats(filmByFilmId.getFilmCats());
+
+                        EntityWrapper<MtimeHallFilmInfoT> hallFilmInfoTEntityWrapper = new EntityWrapper<>();
+                        hallFilmInfoTEntityWrapper.eq("film_id",mtimeFieldT.getFilmId());
+                        List<MtimeHallFilmInfoT> mtimeHallFilmInfoTS = mtimeHallFilmInfoTMapper.selectList(hallFilmInfoTEntityWrapper);
+                        if (!CollectionUtils.isEmpty(mtimeHallFilmInfoTS)){
+                            filmInfoVO.setFilmCats(mtimeHallFilmInfoTS.get(0).getFilmCats());
+                        }
                         filmInfoVO.setFilmLength(filmInfoByFilmId.getFilmLength());
 
                         List<ActorVO> actorVOS = filmService.listActorVOByFilmId(mtimeFieldT.getFilmId());
@@ -316,4 +324,24 @@ public class CinemaServiceImpl implements CinemaService {
     }
 
 
+    /**
+     * 根据场次id获取影院name和影片id
+     * @param fieldId
+     * @return
+     */
+    @Override
+    public CinemaNameAndFilmIdVO getCinemaNameAndFilmIdByFieldId(Integer fieldId) {
+        CinemaNameAndFilmIdVO cinemaNameAndFilmNameVO = new CinemaNameAndFilmIdVO();
+        MtimeFieldT mtimeFieldT = mtimeFieldTMapper.selectById(fieldId);  //根据场次id获取场次对象
+        if (mtimeFieldT != null){
+            cinemaNameAndFilmNameVO.setFilmId(mtimeFieldT.getFilmId());   //封装影片id
+            MtimeCinemaT mtimeCinemaT = mtimeCinemaTMapper.selectById(mtimeFieldT.getCinemaId());//根据影院id获取影院对象
+            if (mtimeCinemaT != null){
+                cinemaNameAndFilmNameVO.setCinemaName(mtimeCinemaT.getCinemaName()); //封装影院name
+            }
+
+        }
+        
+        return cinemaNameAndFilmNameVO;
+    }
 }
