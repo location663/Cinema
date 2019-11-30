@@ -54,10 +54,7 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
     public ErrorResponVO cinemaException(CinemaException e) {
         return new ErrorResponVO(e.getStatus(), e.getMsg());
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> cb9a0754438669c8efbda31ac7a06503daa0e875
 
     @ExceptionHandler(CinemaQueryFailException.class)
     @ResponseBody
@@ -65,10 +62,6 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
         return new ErrorResponVO(CinemaExceptionEnum.CINEMA_QUERY_ERROR.getStatus(), CinemaExceptionEnum.CINEMA_QUERY_ERROR.getMsg());
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> cb9a0754438669c8efbda31ac7a06503daa0e875
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ErrorResponVO Exception(Exception e){
