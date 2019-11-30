@@ -70,7 +70,6 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
     public void setActive(boolean active) {
         this.active = active;
     }
-
     @Override
     protected Serializable pkVal() {
         return this.halltypeId;
