@@ -51,10 +51,10 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
     }
     @ExceptionHandler(CinemaException.class)
     @ResponseBody
-    public ErrorResponVO cinemaException(CinemaException e){
+    public ErrorResponVO cinemaException(CinemaException e) {
         return new ErrorResponVO(e.getStatus(), e.getMsg());
-
     }
+
 
     @ExceptionHandler(CinemaQueryFailException.class)
     @ResponseBody
