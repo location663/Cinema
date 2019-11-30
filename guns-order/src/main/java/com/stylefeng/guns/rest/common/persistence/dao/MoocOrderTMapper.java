@@ -2,6 +2,7 @@ package com.stylefeng.guns.rest.common.persistence.dao;
 
 import com.stylefeng.guns.rest.common.persistence.model.MoocOrderT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * <p>
@@ -13,4 +14,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface MoocOrderTMapper extends BaseMapper<MoocOrderT> {
 
+    @Select("SELECT DISTINCT LAST_INSERT_ID() FROM mooc_order_t")
+    Integer selectLastInsertId();
 }
