@@ -1,6 +1,5 @@
 package com.stylefeng.guns.rest.modular;
 
-
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.core.support.HttpKit;
 import com.stylefeng.guns.rest.service.OrderService;
@@ -8,7 +7,6 @@ import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
