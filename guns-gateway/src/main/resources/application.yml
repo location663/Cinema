@@ -1,6 +1,6 @@
 rest:
-  auth-open: false #jwt鉴权机制是否开启(true或者false)
-  sign-open: false #签名机制是否开启(true或false)
+  auth-open: true #jwt鉴权机制是否开启(true或者false)
+  sign-open: true #签名机制是否开启(true或false)
 
 jwt:
   header: Authorization   #http请求头所需要的字段
@@ -8,6 +8,7 @@ jwt:
   expiration: 604800      #7天 单位:秒
   auth-path: auth         #认证请求的路径
   md5-key: randomKey      #md5加密混淆key
+  ignore: auth,film,cinema/getCinemas,cinema/getCondition,cinema/getFields,register,login
 
 server:
   port: 8080 #项目端口
