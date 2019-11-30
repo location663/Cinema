@@ -5,6 +5,7 @@ import com.stylefeng.guns.core.util.RenderUtil;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
+import com.stylefeng.guns.rest.vo.ErrorResponVO;
 import io.jsonwebtoken.JwtException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,15 +66,17 @@ public class AuthFilter extends OncePerRequestFilter {
                 Object o = redisTemplate.opsForValue().get(authToken);
                 if (o == null) {
                     // o为null 时说明token已过期
-                    RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
+//                    RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
+                    RenderUtil.renderJson(response, new ErrorResponVO(700,"未登录"));
 //                    response.sendRedirect("http://localhost:1818/login");
                     return;
                 }
                 redisTemplate.expire(authToken,5 * 60, TimeUnit.SECONDS);
             } catch (JwtException e) {
                 //有异常就是token解析失败
-                RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
-                response.setHeader("refresh","2;url=http://localhost:1818/login");
+                RenderUtil.renderJson(response, new ErrorResponVO(700,"未登录"));
+//                RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
+//                response.setHeader("refresh","2;url=http://localhost:1818/login");
                 return;
             }
 
@@ -91,8 +94,9 @@ public class AuthFilter extends OncePerRequestFilter {
 //            }
         } else {
             //header没有带Bearer字段
-            RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
-            response.setHeader("refresh","2;url=http://localhost:1818/login");
+            RenderUtil.renderJson(response, new ErrorResponVO(700,"未登录"));
+//            RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
+//            response.setHeader("refresh","2;url=http://localhost:1818/login");
             return;
         }
         chain.doFilter(request, response);
