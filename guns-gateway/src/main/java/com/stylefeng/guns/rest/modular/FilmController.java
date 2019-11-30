@@ -27,23 +27,22 @@ import javax.validation.Valid;
 @RequestMapping("film")
 public class FilmController {
 
-    @Reference(interfaceClass = FilmService.class, check=false)
+
+    @Reference(interfaceClass = FilmService.class, check = false)
     private FilmService filmService;
 
     /**
      * 查询首页
-     * @param islimit
-     * @param page
      * @return
      */
     @RequestMapping("getIndex")
-    public BaseResponVO getIndex(boolean islimit,int page){
+    public BaseResponVO getIndex(){
         FilmIndexVo indexVo = new FilmIndexVo();
         indexVo.setBanners(filmService.getBanners());
         indexVo.setBoxRanking(filmService.getBoxRanking());
         indexVo.setExpectRanking(filmService.getExpectRanking());
-        indexVo.setHotFilms(filmService.getHotFilms(islimit,page));
-        indexVo.setSoonFilms(filmService.getSoonFilms(islimit,page));
+        indexVo.setHotFilms(filmService.getHotFilms(true,10));
+        indexVo.setSoonFilms(filmService.getSoonFilms(true,10));
         indexVo.setTop100(filmService.getTop());
         BaseResponVO baseResponVO = new BaseResponVO();
         baseResponVO.setData(indexVo);
@@ -51,6 +50,9 @@ public class FilmController {
         baseResponVO.setStatus(0);
         return baseResponVO;
     }
+
+
+
     @RequestMapping("getConditionList")
     public BaseResponVO getConditionList(){
         FilmConditionVo conditionVo = new FilmConditionVo();
