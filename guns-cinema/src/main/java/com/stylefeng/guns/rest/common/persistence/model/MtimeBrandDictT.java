@@ -20,7 +20,6 @@ public class MtimeBrandDictT extends Model<MtimeBrandDictT> {
 
     private static final long serialVersionUID = 1L;
 
-    private boolean active;
 
     /**
      * 主键编号
@@ -50,13 +49,6 @@ public class MtimeBrandDictT extends Model<MtimeBrandDictT> {
         this.brandName = brandName;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
 
     @Override
     protected Serializable pkVal() {
@@ -66,7 +58,6 @@ public class MtimeBrandDictT extends Model<MtimeBrandDictT> {
     @Override
     public String toString() {
         return "MtimeBrandDictT{" +
-                "active=" + active +
                 ", brandId=" + brandId +
                 ", brandName='" + brandName + '\'' +
                 '}';

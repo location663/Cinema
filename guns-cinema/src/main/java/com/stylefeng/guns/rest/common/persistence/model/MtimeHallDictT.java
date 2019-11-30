@@ -20,7 +20,6 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
 
     private static final long serialVersionUID = 1L;
 
-    private boolean active;
 
     /**
      * 主键编号
@@ -63,14 +62,6 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
         this.seatAddress = seatAddress;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     @Override
     protected Serializable pkVal() {
         return this.halltypeId;
@@ -79,7 +70,6 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
     @Override
     public String toString() {
         return "MtimeHallDictT{" +
-                "active=" + active +
                 ", halltypeId=" + halltypeId +
                 ", halltypeName='" + halltypeName + '\'' +
                 ", seatAddress='" + seatAddress + '\'' +

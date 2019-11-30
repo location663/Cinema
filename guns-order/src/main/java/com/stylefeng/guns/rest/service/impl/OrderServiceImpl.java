@@ -20,7 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Service(interfaceClass = OrderService.class)
@@ -28,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     MoocOrderTMapper orderTMapper;
+
 
     @Reference(interfaceClass = CinemaService.class, check = false)
     private CinemaService cinemaService;
@@ -61,9 +66,9 @@ public class OrderServiceImpl implements OrderService {
         StringBuilder sb = new StringBuilder();
         for (String seat : seats) {
             int i = Integer.parseInt(seat);
-            sb.append("第" + seatString[i/10] + "排" + (i%10) + "座,");
+            sb.append("第" + seatString[i / 10] + "排" + (i % 10) + "座,");
         }
-        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length() - 1);
         moocOrderT.setSeatsName(sb.toString());
 
         Integer price = cinemaNameAndFilmIdByFieldId.getPrice();
@@ -78,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
         moocOrderT.setOrderUser(userVO.getUuid());
         moocOrderT.setOrderUser(0);
         Integer insert = orderTMapper.insert(moocOrderT);
-        if (0 == insert){
+        if (0 == insert) {
             return new ErrorResponVO(CinemaExceptionEnum.BUYTICKETS_ERROR.getStatus(), CinemaExceptionEnum.BUYTICKETS_ERROR.getMsg());
         }
         Integer id = orderTMapper.selectLastInsertId();
@@ -95,5 +100,15 @@ public class OrderServiceImpl implements OrderService {
         baseResponVO.setData(orderInfoVO);
         baseResponVO.setStatus(0);
         return baseResponVO;
+    }
+
+    @Override
+    public BaseResponVO getOrderInfo(Integer nowPage, Integer pageSize, UserVO userVO) {
+        Page<MoocOrderT> objectPage = new Page<>(nowPage,pageSize);
+        EntityWrapper entityWrapper = new EntityWrapper();
+        entityWrapper.eq("order_user",userVO.getUuid());
+        List list = orderTMapper.selectMapsPage(objectPage, entityWrapper);
+        return new BaseResponVO(0,null,list,null,null,"");
+
     }
 }
