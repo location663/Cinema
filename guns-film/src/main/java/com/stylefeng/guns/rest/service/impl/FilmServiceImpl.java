@@ -79,7 +79,7 @@ public class FilmServiceImpl implements FilmService {
         filmTEntityWrapper.eq("film_status",1);
         List<MtimeFilmT> mtimeFilmTS;
         if(isLimit){
-            Page page=new Page(1,num,"film_box_office");
+            Page page=new Page(1,num,"film_box_office",false);
             mtimeFilmTS= filmTMapper.selectPage(page,filmTEntityWrapper);
         }
         else {
@@ -100,7 +100,7 @@ public class FilmServiceImpl implements FilmService {
         filmTEntityWrapper.eq("film_status",2);
         List<MtimeFilmT> mtimeFilmTS;
         if(isLimit){
-            Page page=new Page(1,num,"film_preSaleNum");
+            Page page=new Page(1,num,"film_preSaleNum",false);
             mtimeFilmTS = filmTMapper.selectPage(page, filmTEntityWrapper);
         }
         else{
@@ -118,7 +118,7 @@ public class FilmServiceImpl implements FilmService {
     public List<FilmInfo> getBoxRanking() {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",1);
-        Page page=new Page(1,10,"film_box_office");
+        Page page=new Page(1,10,"film_box_office",false);
         List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectPage(page,filmTEntityWrapper);
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         return filmInfos;
@@ -128,7 +128,7 @@ public class FilmServiceImpl implements FilmService {
     public List<FilmInfo> getExpectRanking() {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",2);
-        Page<MtimeFilmT> page=new Page<>(1,10,"film_preSaleNum");
+        Page<MtimeFilmT> page=new Page<>(1,10,"film_preSaleNum",false);
         List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectPage(page,filmTEntityWrapper);
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         return filmInfos;
@@ -138,7 +138,7 @@ public class FilmServiceImpl implements FilmService {
     public List<FilmInfo> getTop() {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
         filmTEntityWrapper.eq("film_status",3);
-        Page<MtimeFilmT> page=new Page<>(1,10,"film_score");
+        Page<MtimeFilmT> page=new Page<>(1,10,"film_score",false);
         List<MtimeFilmT> mtimeFilmTS = filmTMapper.selectPage(page,filmTEntityWrapper);
         List<FilmInfo> filmInfos = Mtime2VoTrans.filmTrans(mtimeFilmTS);
         return filmInfos;
