@@ -7,6 +7,6 @@ import java.io.Serializable;
 @Data
 public class BuyTicketDTO implements Serializable {
     private Integer fieldId;
-    private Integer soldSeats;
+    private String soldSeats;
     private String seatsName;
 }
