@@ -15,22 +15,26 @@ import java.io.Serializable;
 public class CinemaNameAndFilmIdVO implements Serializable {
 
     private Integer cinemaId;
-
-    private String cinemaName;
-
     private Integer filmId;
-
+    private String beginTime;
+    private String endTime;
+    private Integer hallId;
+    private String hallName;
     private Integer price;
 
-
+    private String cinemaName;
 
     public CinemaNameAndFilmIdVO() {
     }
 
-    public CinemaNameAndFilmIdVO(Integer cinemaId, String cinemaName, Integer filmId, Integer price) {
+    public CinemaNameAndFilmIdVO(Integer cinemaId, Integer filmId, String beginTime, String endTime, Integer hallId, String hallName, Integer price, String cinemaName) {
         this.cinemaId = cinemaId;
-        this.cinemaName = cinemaName;
         this.filmId = filmId;
+        this.beginTime = beginTime;
+        this.endTime = endTime;
+        this.hallId = hallId;
+        this.hallName = hallName;
         this.price = price;
+        this.cinemaName = cinemaName;
     }
 }

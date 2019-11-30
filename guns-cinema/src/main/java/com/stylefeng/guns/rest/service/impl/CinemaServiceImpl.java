@@ -192,7 +192,7 @@ public class CinemaServiceImpl implements CinemaService {
         CinemaInfoVO cinemaInfoVO = new CinemaInfoVO();
         MtimeCinemaT mtimeCinemaT = mtimeCinemaTMapper.selectById(cinemaId);//根据影院编号获取影院对象信息
         if (mtimeCinemaT!=null){
-            cinemaInfoVO.setCinemaId(mtimeCinemaT.getUuid());//
+            cinemaInfoVO.setCinemaId(mtimeCinemaT.getUuid());
             cinemaInfoVO.setCinemaName(mtimeCinemaT.getCinemaName());
             cinemaInfoVO.setCinemaAdress(mtimeCinemaT.getCinemaAddress());
             cinemaInfoVO.setCinemaPhone(mtimeCinemaT.getCinemaPhone());
@@ -309,9 +309,13 @@ public class CinemaServiceImpl implements CinemaService {
         CinemaNameAndFilmIdVO cinemaNameAndFilmNameVO = new CinemaNameAndFilmIdVO();
         MtimeFieldT mtimeFieldT = mtimeFieldTMapper.selectById(fieldId);  //根据场次id获取场次对象
         if (mtimeFieldT != null){
-            cinemaNameAndFilmNameVO.setPrice(mtimeFieldT.getPrice());
             cinemaNameAndFilmNameVO.setCinemaId(mtimeFieldT.getCinemaId());
             cinemaNameAndFilmNameVO.setFilmId(mtimeFieldT.getFilmId());   //封装影片id
+            cinemaNameAndFilmNameVO.setBeginTime(mtimeFieldT.getBeginTime());
+            cinemaNameAndFilmNameVO.setEndTime(mtimeFieldT.getEndTime());
+            cinemaNameAndFilmNameVO.setHallId(mtimeFieldT.getHallId());
+            cinemaNameAndFilmNameVO.setHallName(mtimeFieldT.getHallName());
+            cinemaNameAndFilmNameVO.setPrice(mtimeFieldT.getPrice());
             MtimeCinemaT mtimeCinemaT = mtimeCinemaTMapper.selectById(mtimeFieldT.getCinemaId());//根据影院id获取影院对象
             if (mtimeCinemaT != null){
                 cinemaNameAndFilmNameVO.setCinemaName(mtimeCinemaT.getCinemaName()); //封装影院name
