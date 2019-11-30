@@ -10,15 +10,10 @@ import com.stylefeng.guns.rest.common.persistence.dao.MtimeHallDictTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeHallFilmInfoTMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.stylefeng.guns.rest.common.persistence.dao.*;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeAreaDictT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeBrandDictT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeCinemaT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeHallFilmInfoT;
+import com.stylefeng.guns.rest.common.persistence.model.*;
 import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.GetCinemasVo;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeFieldT;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.vo.ActorVO;
 import com.stylefeng.guns.rest.vo.FilmForCinema;
@@ -33,8 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -55,6 +48,7 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Autowired
     MtimeHallDictTMapper mtimeHallDictTMapper;
+
     @Autowired
     MtimeHallFilmInfoTMapper mtimeHallFilmInfoTMapper;
 
@@ -62,7 +56,7 @@ public class CinemaServiceImpl implements CinemaService {
     MtimeFieldTMapper mtimeFieldTMapper;
 
     @Override
-    public BaseResponVO getCinemasList(Integer brandId, Integer hallType, Integer districtId,Integer pageSize,Integer nowPage) {
+    public BaseResponVO getCinemasList(Integer brandId, Integer hallType, Integer areaId,Integer pageSize,Integer nowPage) {
         BaseResponVO baseResponVO = new BaseResponVO();
         EntityWrapper<MtimeCinemaT> mtimeCinemaTEntityWrapper = new EntityWrapper<>();
         if (brandId != 99){
@@ -71,12 +65,11 @@ public class CinemaServiceImpl implements CinemaService {
         if (hallType != 99){
             mtimeCinemaTEntityWrapper.like("hall_ids", "#" + hallType + "#");
         }
-        if (districtId != 99){
-            mtimeCinemaTEntityWrapper.eq("area_id",districtId);
+        if (areaId != 99){
+            mtimeCinemaTEntityWrapper.eq("area_id",areaId);
         }
         Page<MtimeCinemaT> mtimeCinemaTPage = new Page<>();
         List<Map<String, Object>> listMaps = mtimeCinemaTMapper.selectMapsPage(mtimeCinemaTPage, mtimeCinemaTEntityWrapper);
-//        List<MtimeCinemaT> mtimeCinemaTS = mtimeCinemaTMapper.selectPage(mtimeCinemaTPage, mtimeCinemaTEntityWrapper);
         List<GetCinemasVo> cinemasVOs = trans2Films(listMaps);
         baseResponVO.setData(cinemasVOs);
         baseResponVO.setImgPre("http://img.meetingshop.cn/");
@@ -121,11 +114,11 @@ public class CinemaServiceImpl implements CinemaService {
                 mtimeHallDictT.setActive(false);
             }
         }
-        ArrayList<List> lists = new ArrayList<>();
-        lists.add(areaList);
-        lists.add(brandList);
-        lists.add(halltypeList);
-        baseResponVO.setData(lists);
+        CinemaConditionT cinemaConditionT = new CinemaConditionT();
+        cinemaConditionT.setAreaList(areaList);
+        cinemaConditionT.setBrandList(brandList);
+        cinemaConditionT.setHalltypeList(halltypeList);
+        baseResponVO.setData(cinemaConditionT);
         baseResponVO.setImgPre("");
         baseResponVO.setStatus(0);
         return baseResponVO;
@@ -142,7 +135,7 @@ public class CinemaServiceImpl implements CinemaService {
         for (Map<String, Object> listMap : listMaps) {
             GetCinemasVo getCinemasVo = new GetCinemasVo();
             getCinemasVo.setCinemaAddress((String) listMap.get("cinemaAddress"));
-            getCinemasVo.setCinamaName((String) listMap.get("cinemaName"));
+            getCinemasVo.setCinemaName((String) listMap.get("cinemaName"));     // *******
             getCinemasVo.setMinimumPrice((Integer) listMap.get("minimumPrice"));
             getCinemasVo.setUuid((Integer) listMap.get("uuid"));
             cinemasVOs.add(getCinemasVo);

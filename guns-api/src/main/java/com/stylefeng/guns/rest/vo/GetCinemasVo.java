@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class GetCinemasVo implements Serializable {
 
     private String cinemaAddress;
-    private String cinamaName;
+    private String cinemaName;
     private Integer minimumPrice;
     private Integer uuid;
 }
