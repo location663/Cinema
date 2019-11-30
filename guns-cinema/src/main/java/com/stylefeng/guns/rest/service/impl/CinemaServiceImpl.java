@@ -334,6 +334,7 @@ public class CinemaServiceImpl implements CinemaService {
         CinemaNameAndFilmIdVO cinemaNameAndFilmNameVO = new CinemaNameAndFilmIdVO();
         MtimeFieldT mtimeFieldT = mtimeFieldTMapper.selectById(fieldId);  //根据场次id获取场次对象
         if (mtimeFieldT != null){
+            cinemaNameAndFilmNameVO.setPrice(mtimeFieldT.getPrice());
             cinemaNameAndFilmNameVO.setFilmId(mtimeFieldT.getFilmId());   //封装影片id
             MtimeCinemaT mtimeCinemaT = mtimeCinemaTMapper.selectById(mtimeFieldT.getCinemaId());//根据影院id获取影院对象
             if (mtimeCinemaT != null){
@@ -341,7 +342,7 @@ public class CinemaServiceImpl implements CinemaService {
             }
 
         }
-        
+
         return cinemaNameAndFilmNameVO;
     }
 }
