@@ -9,7 +9,7 @@
         <!--<result column="active" property="active"/>-->
     </resultMap>
     <select id="getBrandConditionList" resultMap="BaseResultMap">
-        SELECT UUID,show_name FROM `mtime_area_dict_t`;
+        SELECT UUID,show_name FROM `mtime_brand_dict_t`;
     </select>
 
 </mapper>

@@ -61,14 +61,14 @@ public class CinemaController {
      *
      * @param brandId  影院编号
      * @param hallType 影厅类型
-     * @param districtId 行政区编号
+     * @param areaId 行政区编号
      * @param pageSize 每页条数
      * @param nowPage 当前页数
      * @return
      */
     @RequestMapping("/getCinemas")
-    public BaseResponVO getCinemas(Integer brandId, Integer hallType, Integer districtId,Integer pageSize,Integer nowPage){
-        BaseResponVO baseResponVO = cinemaService.getCinemasList(brandId,hallType,districtId,pageSize,nowPage);
+    public BaseResponVO getCinemas(Integer brandId, Integer hallType, Integer areaId,Integer pageSize,Integer nowPage){
+        BaseResponVO baseResponVO = cinemaService.getCinemasList(brandId,hallType,areaId,pageSize,nowPage);
         return baseResponVO;
     }
 

@@ -21,11 +21,7 @@ import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-<<<<<<< HEAD
 import org.springframework.util.CollectionUtils;
-
-=======
->>>>>>> d0be29ca25432e9fb2e465ee21d9134c0114c76e
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

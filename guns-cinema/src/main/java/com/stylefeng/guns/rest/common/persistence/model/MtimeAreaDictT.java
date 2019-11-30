@@ -62,11 +62,13 @@ public class MtimeAreaDictT extends Model<MtimeAreaDictT> {
         return this.areaId;
     }
 
+
     @Override
     public String toString() {
         return "MtimeAreaDictT{" +
-        "uuid=" + areaId +
-        ", showName=" + areaName +
-        "}";
+                "active=" + active +
+                ", areaId=" + areaId +
+                ", areaName='" + areaName + '\'' +
+                '}';
     }
 }
