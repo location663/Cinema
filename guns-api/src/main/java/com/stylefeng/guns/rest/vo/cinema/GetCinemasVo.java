@@ -4,7 +4,7 @@
  * Date:
  * Time: 21:05
  **/
-package com.stylefeng.guns.rest.vo;
+package com.stylefeng.guns.rest.vo.cinema;
 
 import lombok.Data;
 
