@@ -6,6 +6,7 @@ import com.stylefeng.guns.core.support.HttpKit;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.user.UserVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,16 +19,17 @@ public class OrderController {
     @Reference(interfaceClass = OrderService.class, check = false)
     private OrderService orderService;
 
+    @Autowired
     private RedisTemplate redisTemplate;
 
     @RequestMapping("buyTickets")
     public BaseResponVO buyTickets(BuyTicketDTO buyTicketDTO){
-        BaseResponVO baseResponVO = orderService.insertOrder(buyTicketDTO);
+        String token = HttpKit.getRequest().getHeader("Authorization").substring(7);
+        Object object =  redisTemplate.opsForValue().get(token);
+        UserVO userVO = (UserVO) object;
+        BaseResponVO baseResponVO = orderService.insertOrder(buyTicketDTO, userVO);
         return baseResponVO;
     }
-
-
-
 
     /**
      * 获取用户订单信息

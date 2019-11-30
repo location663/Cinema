@@ -7,10 +7,9 @@ import com.stylefeng.guns.rest.vo.user.UserVO;
 
 public interface OrderService {
 
-
-    BaseResponVO insertOrder(BuyTicketDTO buyTicketDTO);
-
+    BaseResponVO insertOrder(BuyTicketDTO buyTicketDTO, UserVO userVO);
 
     BaseResponVO getOrderInfo(Integer nowPage, Integer pageSize, UserVO userVO);
 
+    String getSoldSeatsByFieldId(Integer fieldId);
 }
