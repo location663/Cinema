@@ -40,10 +40,22 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (request.getServletPath().equals("/" + jwtProperties.getAuthPath())) {
-            chain.doFilter(request, response);
-            return;
+
+        String ignore = jwtProperties.getIgnore();
+        String[] split = ignore.split(",");
+        String servletPath = request.getServletPath();
+
+        for (String path : split) {
+            if (servletPath.contains(path)){
+                chain.doFilter(request, response);
+                return;
+            }
         }
+
+//        if (request.getServletPath().equals("/" + jwtProperties.getAuthPath())) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
         final String requestHeader = request.getHeader(jwtProperties.getHeader());
         String authToken = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
@@ -54,12 +66,14 @@ public class AuthFilter extends OncePerRequestFilter {
                 if (o == null) {
                     // o为null 时说明token已过期
                     RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
+//                    response.sendRedirect("http://localhost:1818/login");
                     return;
                 }
                 redisTemplate.expire(authToken,5 * 60, TimeUnit.SECONDS);
             } catch (JwtException e) {
                 //有异常就是token解析失败
                 RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
+                response.setHeader("refresh","2;url=http://localhost:1818/login");
                 return;
             }
 
@@ -78,6 +92,7 @@ public class AuthFilter extends OncePerRequestFilter {
         } else {
             //header没有带Bearer字段
             RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
+            response.setHeader("refresh","2;url=http://localhost:1818/login");
             return;
         }
         chain.doFilter(request, response);
