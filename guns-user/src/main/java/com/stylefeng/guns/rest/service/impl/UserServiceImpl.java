@@ -8,6 +8,7 @@ import com.stylefeng.guns.rest.common.persistence.model.MtimeUserT;
 import com.stylefeng.guns.rest.dto.UserRegisterDTO;
 import com.stylefeng.guns.rest.service.UserService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
+import com.stylefeng.guns.rest.vo.ErrorResponVO;
 import com.stylefeng.guns.rest.vo.user.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,7 +122,8 @@ public class UserServiceImpl implements UserService {
     public BaseResponVO getUserInfo(String token) throws CinemaException {
         Object o = redisTemplate.opsForValue().get(token);
         if(o == null){
-            throw new CinemaException(1, "查询失败，用户尚未登陆");
+//            throw new CinemaException(1, "查询失败，用户尚未登陆");
+            return new ErrorResponVO(700, "未登录");
         }
         UserVO userVO = (UserVO) o;
         return new BaseResponVO(0, null, userVO, null, null, null);
