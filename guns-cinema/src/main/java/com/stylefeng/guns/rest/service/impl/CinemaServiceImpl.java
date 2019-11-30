@@ -28,8 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -137,7 +135,7 @@ public class CinemaServiceImpl implements CinemaService {
         for (Map<String, Object> listMap : listMaps) {
             GetCinemasVo getCinemasVo = new GetCinemasVo();
             getCinemasVo.setCinemaAddress((String) listMap.get("cinemaAddress"));
-            getCinemasVo.setCinamaName((String) listMap.get("cinemaName"));
+            getCinemasVo.setCinemaName((String) listMap.get("cinemaName"));     // *******
             getCinemasVo.setMinimumPrice((Integer) listMap.get("minimumPrice"));
             getCinemasVo.setUuid((Integer) listMap.get("uuid"));
             cinemasVOs.add(getCinemasVo);
