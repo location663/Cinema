@@ -6,7 +6,11 @@ import com.stylefeng.guns.rest.common.exception.CinemaException;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmInfoTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.*;
 import com.stylefeng.guns.rest.common.persistence.model.*;
+
+import com.stylefeng.guns.rest.common.utils.TransferUtils;
+
 import com.stylefeng.guns.rest.exception.CinemaBusinessException;
+
 import com.stylefeng.guns.rest.util.Mtime2VoTrans;
 import com.stylefeng.guns.rest.vo.film.*;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmTMapper;
@@ -21,9 +25,10 @@ import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.text.SimpleDateFormat;
+
+import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -183,7 +188,11 @@ public class FilmServiceImpl implements FilmService {
         return years;
     }
 
-
+    /**
+     * 根据传递的参数返回不同类型的电源列表
+     * @param filmRequestVO
+     * @return
+     */
     @Override
     public BaseResponVO listFilms(FilmRequestVO filmRequestVO) {
         BaseResponVO baseResponVO = new BaseResponVO();
@@ -216,7 +225,12 @@ public class FilmServiceImpl implements FilmService {
         return baseResponVO;
     }
 
-
+    /**
+     * 根据id返回电源的详细信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
     @Override
     public BaseResponVO getFilmById(int id) throws Exception {
         BaseResponVO baseResponVO = new BaseResponVO();
@@ -253,7 +267,7 @@ public class FilmServiceImpl implements FilmService {
         filmDetailVO.setInfo01(sb.toString());
         MtimeSourceDictT mtimeSourceDictT = sourceDictTMapper.selectById(filmT.getFilmSource());
         filmDetailVO.setInfo02(mtimeSourceDictT.getShowName() + " / " + filmInfoT.getFilmLength() + "分钟");
-        String s = parseDate2String(filmT.getFilmTime());
+        String s = TransferUtils.parseDate2String(filmT.getFilmTime());
         filmDetailVO.setInfo03(s + " " +  mtimeSourceDictT.getShowName() + " 上映");
 
         InfoRequestVO infoRequestVO = new InfoRequestVO();
@@ -289,6 +303,12 @@ public class FilmServiceImpl implements FilmService {
         return baseResponVO;
     }
 
+    /**
+     * 根据电源名字返回电源的详细信息
+     * @param name
+     * @return
+     * @throws Exception
+     */
     @Override
     public BaseResponVO getFilmByName(String name) throws Exception {
         EntityWrapper<MtimeFilmT> filmTEntityWrapper = new EntityWrapper<>();
@@ -302,6 +322,11 @@ public class FilmServiceImpl implements FilmService {
         return filmById;
     }
 
+    /**
+     * 根据电影id返回参演人员的信息
+     * @param filmId
+     * @return
+     */
     @Override
     public List<ActorVO> listActorVOByFilmId(Integer filmId) {
         EntityWrapper<MtimeFilmActorT> filmActorTEntityWrapper = new EntityWrapper<>();
@@ -328,7 +353,9 @@ public class FilmServiceImpl implements FilmService {
     public FilmForCinema getFilmByFilmId(Integer filmId) {
         MtimeFilmT mtimeFilmT = filmTMapper.selectById(filmId);
         FilmForCinema filmForCinema = new FilmForCinema();
-        BeanUtils.copyProperties(mtimeFilmT,filmForCinema);
+        if (null != mtimeFilmT) {
+            BeanUtils.copyProperties(mtimeFilmT, filmForCinema);
+        }
         return filmForCinema;
     }
 
@@ -344,7 +371,9 @@ public class FilmServiceImpl implements FilmService {
         List<MtimeFilmInfoT> mtimeFilmInfoTS = filmInfoTMapper.selectList(mtimeFilmInfoTEntityWrapper);
 
         FilmInfoForCinema filmInfoForCinema = new FilmInfoForCinema();
-        BeanUtils.copyProperties(mtimeFilmInfoTS.get(0),filmInfoForCinema);
+        if (!CollectionUtils.isEmpty(mtimeFilmInfoTS)){
+            BeanUtils.copyProperties(mtimeFilmInfoTS.get(0),filmInfoForCinema);
+        }
         return filmInfoForCinema;
     }
 
@@ -377,10 +406,6 @@ public class FilmServiceImpl implements FilmService {
         return imgVO;
     }
 
-    private String parseDate2String(Date date){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String format = simpleDateFormat.format(date);
-        return format;
-    }
+
 
 }
