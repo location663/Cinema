@@ -18,7 +18,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 @RequestMapping("cinema")
 public class CinemaController {
 
-    @Reference(interfaceClass = CinemaService.class)
+    @Reference(interfaceClass = CinemaService.class, check = false)
     CinemaService cinemaService;
 
     @RequestMapping("/getCinemas")
