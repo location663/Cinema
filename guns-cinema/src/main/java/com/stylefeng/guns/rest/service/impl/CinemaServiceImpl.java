@@ -13,7 +13,7 @@ import com.stylefeng.guns.rest.common.persistence.dao.*;
 import com.stylefeng.guns.rest.common.persistence.model.*;
 import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
-import com.stylefeng.guns.rest.vo.GetCinemasVo;
+import com.stylefeng.guns.rest.vo.cinema.GetCinemasVo;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.vo.ActorVO;
 import com.stylefeng.guns.rest.vo.FilmForCinema;
@@ -56,17 +56,17 @@ public class CinemaServiceImpl implements CinemaService {
     MtimeFieldTMapper mtimeFieldTMapper;
 
     @Override
-    public BaseResponVO getCinemasList(Integer brandId, Integer hallType, Integer areaId,Integer pageSize,Integer nowPage) {
+    public BaseResponVO getCinemasList(CinemaGetCinemasVO cinemaGetCinemasVO) {
         BaseResponVO baseResponVO = new BaseResponVO();
         EntityWrapper<MtimeCinemaT> mtimeCinemaTEntityWrapper = new EntityWrapper<>();
-        if (brandId != 99){
-            mtimeCinemaTEntityWrapper.eq("brand_id", brandId);
+        if (cinemaGetCinemasVO.getBrandId() != 99){
+            mtimeCinemaTEntityWrapper.eq("brand_id", cinemaGetCinemasVO.getBrandId());
         }
-        if (hallType != 99){
-            mtimeCinemaTEntityWrapper.like("hall_ids", "#" + hallType + "#");
+        if (cinemaGetCinemasVO.getHallType() != 99){
+            mtimeCinemaTEntityWrapper.like("hall_ids", "#" + cinemaGetCinemasVO.getHallType() + "#");
         }
-        if (areaId != 99){
-            mtimeCinemaTEntityWrapper.eq("area_id",areaId);
+        if (cinemaGetCinemasVO.getAreaId() != 99){
+            mtimeCinemaTEntityWrapper.eq("area_id",cinemaGetCinemasVO.getAreaId());
         }
         Page<MtimeCinemaT> mtimeCinemaTPage = new Page<>();
         List<Map<String, Object>> listMaps = mtimeCinemaTMapper.selectMapsPage(mtimeCinemaTPage, mtimeCinemaTEntityWrapper);
@@ -74,9 +74,9 @@ public class CinemaServiceImpl implements CinemaService {
         baseResponVO.setData(cinemasVOs);
         baseResponVO.setImgPre("http://img.meetingshop.cn/");
         baseResponVO.setMsg("");
-        baseResponVO.setNowPage(nowPage);
+        baseResponVO.setNowPage(cinemaGetCinemasVO.getNowPage());
         baseResponVO.setStatus(0);
-        baseResponVO.setTotalPage((int) Math.ceil(1.0*cinemasVOs.size()/pageSize));
+        baseResponVO.setTotalPage((int) Math.ceil(1.0*cinemasVOs.size()/cinemaGetCinemasVO.getPageSize()));
         return baseResponVO;
     }
 
@@ -90,28 +90,28 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public BaseResponVO getConditionList(Integer brandId,Integer hallType,Integer areaId) {
         BaseResponVO baseResponVO = new BaseResponVO();
-        ArrayList<MtimeAreaDictT> areaList = mtimeAreaDictTMapper.getAreaConditionList();
-        ArrayList<MtimeBrandDictT> brandList = mtimeBrandDictTMapper.getBrandConditionList();
-        ArrayList<MtimeHallDictT> halltypeList = mtimeHallDictTMapper.getHallCondition();
-        for (MtimeAreaDictT mtimeAreaDictT : areaList) {
-            if (mtimeAreaDictT.getAreaId().equals(areaId)){
-                mtimeAreaDictT.setActive(true);
+        ArrayList<AreaVO> areaList = mtimeAreaDictTMapper.getAreaConditionList();
+        ArrayList<BrandVO> brandList = mtimeBrandDictTMapper.getBrandConditionList();
+        ArrayList<HallTypeVO> halltypeList = mtimeHallDictTMapper.getHallCondition();
+        for (AreaVO area : areaList) {
+            if (area.getAreaId().equals(areaId)){
+                area.setActive(true);
             }else {
-                mtimeAreaDictT.setActive(false);
+                area.setActive(false);
             }
         }
-        for (MtimeBrandDictT mtimeBrandDictT : brandList) {
-            if (mtimeBrandDictT.getBrandId().equals(brandId)){
-                mtimeBrandDictT.setActive(true);
+        for (BrandVO brand : brandList) {
+            if (brand.getBrandId().equals(brandId)){
+                brand.setActive(true);
             }else {
-                mtimeBrandDictT.setActive(false);
+                brand.setActive(true);
             }
         }
-        for (MtimeHallDictT mtimeHallDictT : halltypeList) {
-            if (mtimeHallDictT.getHalltypeId().equals(hallType)){
-                mtimeHallDictT.setActive(true);
+        for (HallTypeVO hallTypeVO : halltypeList) {
+            if (hallTypeVO.getHalltypeId().equals(hallType)){
+                hallTypeVO.setActive(true);
             }else {
-                mtimeHallDictT.setActive(false);
+                hallTypeVO.setActive(false);
             }
         }
         CinemaConditionT cinemaConditionT = new CinemaConditionT();
@@ -262,12 +262,6 @@ public class CinemaServiceImpl implements CinemaService {
             }
 
             for (MtimeFieldT mtimeFieldT : mtimeFieldTS) {
-                //根据放映场次查询播放的电影编号，然后根据电影编号获取对应的电影信息
-//                FilmForCinema filmByFilmId = filmService.getFilmByFilmId(mtimeFieldT.getFilmId());
-//                FilmInfoForCinema filmInfoByFilmId = filmService.getFilmInfoByFilmId(mtimeFieldT.getFilmId());//同上
-
-                //根据场次id获取 filmField
-                //MtimeHallDictT mtimeHallDictT = mtimeHallDictTMapper.selectById(mtimeFieldT.getHallId());
                 FilmFieldVO filmFieldVO = new FilmFieldVO();
                 filmFieldVO.setBeginTime(mtimeFieldT.getBeginTime());
                 filmFieldVO.setEndTime(mtimeFieldT.getEndTime());
@@ -288,25 +282,6 @@ public class CinemaServiceImpl implements CinemaService {
                         }
                     }
                 }
-                //封装filmInfo
-                /*FilmInfoVO filmInfoVO = new FilmInfoVO();
-                filmInfoVO.setFilmId(mtimeFieldT.getFilmId());
-                filmInfoVO.setFilmName(filmByFilmId.getFilmName());
-                filmInfoVO.setFilmType(filmByFilmId.getFilmType());
-                filmInfoVO.setImgAddress(filmByFilmId.getImgAddress());
-                filmInfoVO.setFilmCats(filmByFilmId.getFilmCats());
-                filmInfoVO.setFilmLength(filmInfoByFilmId.getFilmLength());
-
-                List<ActorVO> actorVOS = filmService.listActorVOByFilmId(mtimeFieldT.getFilmId());
-                StringBuilder stringBuilder = new StringBuilder();
-                for (ActorVO actorVO : actorVOS) {
-                    stringBuilder.append(actorVO.getDirectorName()).append(",");
-                }
-                stringBuilder.deleteCharAt(stringBuilder.length()-1);
-                filmInfoVO.setActors(stringBuilder.toString());*/
-
-                //filmInfoVO.getFilmFields().add(filmFieldVO);//封装 filmFields
-                //filmList.add(filmInfoVO);
             }
         }
 

@@ -20,8 +20,6 @@ public class MtimeAreaDictT extends Model<MtimeAreaDictT> {
 
     private static final long serialVersionUID = 1L;
 
-    private boolean active;
-
     /**
      * 主键编号
      */
@@ -49,14 +47,6 @@ public class MtimeAreaDictT extends Model<MtimeAreaDictT> {
         this.areaName = areaName;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     @Override
     protected Serializable pkVal() {
         return this.areaId;
@@ -66,7 +56,6 @@ public class MtimeAreaDictT extends Model<MtimeAreaDictT> {
     @Override
     public String toString() {
         return "MtimeAreaDictT{" +
-                "active=" + active +
                 ", areaId=" + areaId +
                 ", areaName='" + areaName + '\'' +
                 '}';
