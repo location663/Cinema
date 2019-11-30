@@ -14,16 +14,21 @@ import java.io.Serializable;
 @Data
 public class CinemaNameAndFilmIdVO implements Serializable {
 
+    private Integer cinemaId;
+
     private String cinemaName;
 
     private Integer filmId;
 
     private Integer price;
 
+
+
     public CinemaNameAndFilmIdVO() {
     }
 
-    public CinemaNameAndFilmIdVO(String cinemaName, Integer filmId, Integer price) {
+    public CinemaNameAndFilmIdVO(Integer cinemaId, String cinemaName, Integer filmId, Integer price) {
+        this.cinemaId = cinemaId;
         this.cinemaName = cinemaName;
         this.filmId = filmId;
         this.price = price;
