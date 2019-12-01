@@ -2,13 +2,12 @@ package com.stylefeng.guns.rest.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeUserTMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeUserT;
 import com.stylefeng.guns.rest.dto.UserRegisterDTO;
 import com.stylefeng.guns.rest.service.UserService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
-import com.stylefeng.guns.rest.vo.UserVO;
+import com.stylefeng.guns.rest.vo.user.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -89,6 +88,7 @@ public class UserServiceImpl implements UserService {
         if (mtimeUserTS == null){
             return null;
         }
+
         UserVO userVO = null;
         for (MtimeUserT mtimeUserT : mtimeUserTS) {
             if (password.equals(mtimeUserT.getUserPwd())){
@@ -97,5 +97,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         return userVO;
+
     }
 }

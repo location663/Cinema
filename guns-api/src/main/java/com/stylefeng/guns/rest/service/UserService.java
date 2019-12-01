@@ -3,7 +3,8 @@ package com.stylefeng.guns.rest.service;
 
 import com.stylefeng.guns.rest.dto.UserRegisterDTO;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
-import com.stylefeng.guns.rest.vo.UserVO;
+import com.stylefeng.guns.rest.vo.user.UserVO;
+
 
 public interface UserService {
     BaseResponVO userRegister(UserRegisterDTO user);
@@ -11,6 +12,5 @@ public interface UserService {
     BaseResponVO userCheck(String username);
 
     UserVO auth(String username, String password);
-
 
 }

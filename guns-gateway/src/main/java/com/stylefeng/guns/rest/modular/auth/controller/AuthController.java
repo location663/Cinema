@@ -3,13 +3,18 @@ package com.stylefeng.guns.rest.modular.auth.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
-import com.stylefeng.guns.rest.common.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.modular.auth.controller.dto.AuthRequest;
 import com.stylefeng.guns.rest.modular.auth.controller.dto.AuthResponse;
 import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
-import com.stylefeng.guns.rest.modular.auth.validator.IReqValidator;
+
 import com.stylefeng.guns.rest.service.UserService;
-import com.stylefeng.guns.rest.vo.UserVO;
+
+
+
+import com.stylefeng.guns.rest.vo.BaseResponVO;
+
+
+import com.stylefeng.guns.rest.vo.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
@@ -35,26 +40,32 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    RedisTemplate redisTemplate;
+    private RedisTemplate redisTemplate;
 
     @RequestMapping(value = "${jwt.auth-path}")
-    public ResponseEntity<?> createAuthenticationToken(AuthRequest authRequest) {
-
-        String username = authRequest.getUserName();
-        String password = authRequest.getPassword();
-
-        UserVO auth = userService.auth(username, password);
+    public BaseResponVO createAuthenticationToken(AuthRequest authRequest) {
 
 
-        if (null != auth) {
-            // 生成randomKey
-            final String randomKey = jwtTokenUtil.getRandomKey();
-            final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
-            redisTemplate.opsForValue().set(token, auth);
-            redisTemplate.expire(token, 5 * 60 , TimeUnit.SECONDS);
-            return ResponseEntity.ok(new AuthResponse(token, randomKey));
-        } else {
+
+
+        UserVO userVO = userService.auth(authRequest.getUserName(),authRequest.getPassword());
+
+        if (userVO == null){
+
             throw new GunsException(BizExceptionEnum.AUTH_REQUEST_ERROR);
         }
+
+        // 生成randomKey
+        final String randomKey = jwtTokenUtil.getRandomKey();
+        final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
+
+        redisTemplate.opsForValue().set(token,userVO);
+        redisTemplate.expire(token,5 * 60, TimeUnit.SECONDS);
+
+        ResponseEntity<AuthResponse> ok = ResponseEntity.ok(new AuthResponse(token, randomKey));
+        AuthResponse body = ok.getBody();
+
+        BaseResponVO baseResponVO = new BaseResponVO(0,null,body,null,null,null);
+        return baseResponVO;
     }
 }
