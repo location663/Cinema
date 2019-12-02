@@ -7,6 +7,7 @@ import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.user.UserVO;
 
 public interface UserService {
+
     BaseResponVO userRegister(UserRegisterDTO user);
 
     BaseResponVO userCheck(String username);
