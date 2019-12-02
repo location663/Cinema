@@ -192,6 +192,29 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public OrderInfoVO getById(Integer orderId) {
+        MoocOrderT moocOrderT = orderTMapper.selectById(orderId);
+        OrderInfoVO orderInfoVO = new OrderInfoVO();
+        Integer fieldId = moocOrderT.getFieldId();
+        CinemaNameAndFilmIdVO cinemaNameAndFilmIdByFieldId = cinemaService.getCinemaNameAndFilmIdByFieldId(fieldId);
+        orderInfoVO.setCinemaName(cinemaNameAndFilmIdByFieldId.getCinemaName());
+        orderInfoVO.setFieldTime(TransferUtils.parseDate2String2(new Date()) + " " + cinemaNameAndFilmIdByFieldId.getBeginTime());
+        orderInfoVO.setFilmName(filmService.getFilmByFilmId(cinemaNameAndFilmIdByFieldId.getFilmId()).getFilmName());
+        orderInfoVO.setOrderId(orderId.toString());
+        orderInfoVO.setOrderPrice(moocOrderT.getOrderPrice().toString());
+        orderInfoVO.setOrderStatus(orderStatus[moocOrderT.getOrderStatus()]);
+        Long time = moocOrderT.getOrderTime().getTime();
+        orderInfoVO.setOrderTimestamp(time.toString());
+        return orderInfoVO;
+    }
+
+    @Override
+    public Integer updateStatusById(Integer status, Integer id) {
+        Integer res = orderTMapper.updateStatusById(status, id);
+        return res;
+    }
+
     private List<OrderInfoVO> orderDO2OrderInfo(List<Map<String, Object>> maps) {
         ArrayList<OrderInfoVO> orderInfoVOS = new ArrayList<>();
         for (Map<String, Object> map : maps) {
