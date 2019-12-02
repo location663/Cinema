@@ -206,6 +206,10 @@ public class OrderServiceImpl implements OrderService {
         orderInfoVO.setOrderStatus(orderStatus[moocOrderT.getOrderStatus()]);
         Long time = moocOrderT.getOrderTime().getTime();
         orderInfoVO.setOrderTimestamp(time.toString());
+        orderInfoVO.setFilmPrice(moocOrderT.getFilmPrice());
+        String seatsIds = moocOrderT.getSeatsIds();
+        String[] split = seatsIds.split(",");
+        orderInfoVO.setQuantity(split.length);
         return orderInfoVO;
     }
 
