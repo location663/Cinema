@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Service(interfaceClass = OrderService.class)
@@ -77,7 +78,13 @@ public class OrderServiceImpl implements OrderService {
 //        sb.deleteCharAt(sb.length() - 1);
 //        moocOrderT.setSeatsName(sb.toString());
 
-        SeatsVO seatsFromFront = GetSeats.getSeatsFromFront("http://localhost:1818/json/4dx.json");
+        String seatAddress = cinemaNameAndFilmIdByFieldId.getSeatAddress();
+        SeatsVO seatsFromFront = (SeatsVO) redisTemplate.opsForValue().get(seatAddress);
+        if (null == seatsFromFront) {
+            seatsFromFront = GetSeats.getSeatsFromFront("http://localhost:1818" + seatAddress);
+            redisTemplate.opsForValue().set(seatAddress, seatsFromFront);
+            redisTemplate.expire(seatAddress,5 * 60, TimeUnit.HOURS);
+        }
         String[] seatIds = seatsFromFront.getIds().split(",");
         SeatVO[][] single = seatsFromFront.getSingle();
         SeatVO[][] couple = seatsFromFront.getCouple();
@@ -173,12 +180,16 @@ public class OrderServiceImpl implements OrderService {
         array[1] = 1;
         orderTEntityWrapper.in("order_status", array);
         List<MoocOrderT> moocOrderTS = orderTMapper.selectList(orderTEntityWrapper);
-        StringBuilder sb = new StringBuilder();
-        for (MoocOrderT moocOrderT : moocOrderTS) {
-            sb.append(moocOrderT.getSeatsIds() + ",");
+        if (!moocOrderTS.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (MoocOrderT moocOrderT : moocOrderTS) {
+                sb.append(moocOrderT.getSeatsIds() + ",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            return sb.toString();
+        } else {
+            return "";
         }
-        sb.deleteCharAt(sb.length() - 1);
-        return sb.toString();
     }
 
     private List<OrderInfoVO> orderDO2OrderInfo(List<Map<String, Object>> maps) {
