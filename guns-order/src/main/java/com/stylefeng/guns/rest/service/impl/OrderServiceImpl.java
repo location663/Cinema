@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    MoocOrderTMapper orderTMapper;
+    private MoocOrderTMapper orderTMapper;
 
 
     @Reference(interfaceClass = CinemaService.class, check = false)
@@ -207,6 +207,12 @@ public class OrderServiceImpl implements OrderService {
         Long time = moocOrderT.getOrderTime().getTime();
         orderInfoVO.setOrderTimestamp(time.toString());
         return orderInfoVO;
+    }
+
+    @Override
+    public Integer updateStatusById(Integer status, Integer id) {
+        Integer res = orderTMapper.updateStatusById(status, id);
+        return res;
     }
 
     private List<OrderInfoVO> orderDO2OrderInfo(List<Map<String, Object>> maps) {

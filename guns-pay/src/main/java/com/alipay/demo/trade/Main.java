@@ -1,5 +1,6 @@
 package com.alipay.demo.trade;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alipay.api.AlipayResponse;
 import com.alipay.api.domain.TradeFundBill;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
@@ -21,6 +22,8 @@ import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
 import com.alipay.demo.trade.utils.Utils;
 import com.alipay.demo.trade.utils.ZxingUtils;
+import com.stylefeng.guns.rest.service.OrderService;
+import com.stylefeng.guns.rest.vo.order.OrderInfoVO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +47,8 @@ public class Main {
     // 支付宝交易保障接口服务，供测试接口api使用，请先阅读readme.txt
     private static AlipayMonitorService monitorService;
 
-
+    @Reference(interfaceClass = OrderService.class, check = false)
+    OrderService orderService;
 
     static {
         /** 一定要在创建AlipayTradeService之前调用Configs.init()设置默认参数
@@ -368,18 +372,22 @@ public class Main {
     }
 
     // 测试当面付2.0生成支付二维码
-    public void test_trade_precreate() {
+    public void test_trade_precreate(Integer orderId) {
         // (必填) 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
         // 需保证商户系统端不能重复，建议通过数据库sequence生成，
-        String outTradeNo = "tradeprecreate" + System.currentTimeMillis()
-                            + (long) (Math.random() * 10000000L);
+        String outTradeNo = "tradeprecreate" + orderId;
+
+        OrderInfoVO orderInfoVO = orderService.getById(orderId);
+
 
         // (必填) 订单标题，粗略描述用户的支付目的。如“xxx品牌xxx门店当面付扫码消费”
-        String subject = "xxx品牌xxx门店当面付扫码消费";
+//        String subject = "xxx品牌xxx门店当面付扫码消费";
+        String subject = orderInfoVO.getCinemaName() + " 当面付扫码消费";
 
         // (必填) 订单总金额，单位为元，不能超过1亿元
         // 如果同时传入了【打折金额】,【不可打折金额】,【订单总金额】三者,则必须满足如下条件:【订单总金额】=【打折金额】+【不可打折金额】
-        String totalAmount = "0.01";
+//        String totalAmount = "0.01";
+        String totalAmount = orderInfoVO.getOrderPrice();
 
         // (可选) 订单不可打折金额，可以配合商家平台配置折扣活动，如果酒水不参与打折，则将对应金额填写至此字段
         // 如果该值未传入,但传入了【订单总金额】,【打折金额】,则该值默认为【订单总金额】-【打折金额】
@@ -390,7 +398,8 @@ public class Main {
         String sellerId = "";
 
         // 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
-        String body = "购买商品3件共20.00元";
+//        String body = "购买商品3件共20.00元";
+        String body = "共"+ orderInfoVO.getOrderPrice() +"元";
 
         // 商户操作员编号，添加此参数可以为商户操作员做销售统计
         String operatorId = "test_operator_id";
@@ -408,13 +417,13 @@ public class Main {
         // 商品明细列表，需填写购买商品详细信息，
         List<GoodsDetail> goodsDetailList = new ArrayList<GoodsDetail>();
         // 创建一个商品信息，参数含义分别为商品id（使用国标）、名称、单价（单位为分）、数量，如果需要添加商品类别，详见GoodsDetail
-        GoodsDetail goods1 = GoodsDetail.newInstance("goods_id001", "xxx小面包", 1000, 1);
+        GoodsDetail goods1 = GoodsDetail.newInstance("goods_id001", orderInfoVO.getFilmName(), orderInfoVO.get, 1);
         // 创建好一个商品后添加至商品明细列表
         goodsDetailList.add(goods1);
 
         // 继续创建并添加第一条商品信息，用户购买的产品为“黑人牙刷”，单价为5.00元，购买了两件
-        GoodsDetail goods2 = GoodsDetail.newInstance("goods_id002", "xxx牙刷", 500, 2);
-        goodsDetailList.add(goods2);
+//        GoodsDetail goods2 = GoodsDetail.newInstance("goods_id002", "xxx牙刷", 500, 2);
+//        goodsDetailList.add(goods2);
 
         // 创建扫码支付请求builder，设置请求参数
         AlipayTradePrecreateRequestBuilder builder = new AlipayTradePrecreateRequestBuilder()
