@@ -5,7 +5,7 @@ import com.stylefeng.guns.core.base.tips.ErrorTip;
 import com.stylefeng.guns.rest.common.exception.*;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.common.exception.CinemaException;
-import com.stylefeng.guns.rest.common.exception.CinemaParameterException;
+import com.stylefeng.guns.rest.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.exception.CinemaBusinessException;
 import com.stylefeng.guns.rest.exception.CinemaExceptionEnum;
 import com.stylefeng.guns.rest.vo.ErrorResponVO;

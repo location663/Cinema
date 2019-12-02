@@ -6,6 +6,7 @@ import com.stylefeng.guns.rest.dto.UserRegisterDTO;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.user.UserVO;
 
+
 public interface UserService {
 
     BaseResponVO userRegister(UserRegisterDTO user);
@@ -19,4 +20,5 @@ public interface UserService {
     BaseResponVO getUserInfo(String token) throws CinemaException;
 
     BaseResponVO updateUserInfo(String token, UserVO userVO) throws CinemaException;
+
 }

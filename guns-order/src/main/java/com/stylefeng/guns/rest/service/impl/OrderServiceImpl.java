@@ -7,6 +7,7 @@ import com.stylefeng.guns.rest.common.persistence.model.MoocOrderT;
 import com.stylefeng.guns.rest.common.utils.TransferUtils;
 import com.stylefeng.guns.rest.dto.BuyTicketDTO;
 import com.stylefeng.guns.rest.exception.CinemaExceptionEnum;
+import com.stylefeng.guns.rest.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.service.OrderService;
@@ -38,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    MoocOrderTMapper orderTMapper;
+    private MoocOrderTMapper orderTMapper;
 
 
     @Reference(interfaceClass = CinemaService.class, check = false)
@@ -159,6 +160,39 @@ public class OrderServiceImpl implements OrderService {
         } else {
             return "";
         }
+    }
+
+    @Override
+    public OrderInfoVO getById(Integer orderId) throws CinemaParameterException {
+        EntityWrapper<MoocOrderT> orderTEntityWrapper = new EntityWrapper<>();
+        orderTEntityWrapper.eq("uuid", orderId);
+        List<MoocOrderT> moocOrderTS = orderTMapper.selectList(orderTEntityWrapper);
+        if (moocOrderTS.isEmpty()){
+            throw new CinemaParameterException();
+        }
+        MoocOrderT moocOrderT = moocOrderTS.get(0);
+        OrderInfoVO orderInfoVO = new OrderInfoVO();
+        Integer fieldId = moocOrderT.getFieldId();
+        CinemaNameAndFilmIdVO cinemaNameAndFilmIdByFieldId = cinemaService.getCinemaNameAndFilmIdByFieldId(fieldId);
+        orderInfoVO.setCinemaName(cinemaNameAndFilmIdByFieldId.getCinemaName());
+        orderInfoVO.setFieldTime(TransferUtils.parseDate2String2(new Date()) + " " + cinemaNameAndFilmIdByFieldId.getBeginTime());
+        orderInfoVO.setFilmName(filmService.getFilmByFilmId(cinemaNameAndFilmIdByFieldId.getFilmId()).getFilmName());
+        orderInfoVO.setOrderId(orderId.toString());
+        orderInfoVO.setOrderPrice(moocOrderT.getOrderPrice().toString());
+        orderInfoVO.setOrderStatus(orderStatus[moocOrderT.getOrderStatus()]);
+        Long time = moocOrderT.getOrderTime().getTime();
+        orderInfoVO.setOrderTimestamp(time.toString());
+        orderInfoVO.setFilmPrice(moocOrderT.getFilmPrice());
+        String seatsIds = moocOrderT.getSeatsIds();
+        String[] split = seatsIds.split(",");
+        orderInfoVO.setQuantity(split.length);
+        return orderInfoVO;
+    }
+
+    @Override
+    public Integer updateStatusById(Integer status, Integer id) {
+        Integer res = orderTMapper.updateStatusById(status, id);
+        return res;
     }
 
     private List<OrderInfoVO> orderDO2OrderInfo(List<Map<String, Object>> maps) {
