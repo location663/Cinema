@@ -4,7 +4,7 @@
  * Date:
  * Time: 21:05
  **/
-package com.stylefeng.guns.rest.vo;
+package com.stylefeng.guns.rest.vo.cinema;
 
 import lombok.Data;
 
@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class GetCinemasVo implements Serializable {
 
     private String cinemaAddress;
-    private String cinamaName;
+    private String cinemaName;
     private Integer minimumPrice;
     private Integer uuid;
 }

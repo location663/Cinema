@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
 
     @Reference(interfaceClass = UserService.class, check = false)
-    UserService userService;
+    private UserService userService;
 
     /**
      * 用户注册

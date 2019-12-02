@@ -6,10 +6,16 @@
     <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeAreaDictT">
         <id column="UUID" property="areaId" />
         <result column="show_name" property="areaName" />
-        <!--<id column="active" property="active"/>-->
+        <!--<result column="active" property="active"/>-->
     </resultMap>
-    <select id="getAreaConditionList" resultMap="BaseResultMap">
-        SELECT UUID,show_name FROM `mtime_brand_dict_t`;
+
+    <!--自己写的-->
+    <resultMap id="AreaMap" type="com.stylefeng.guns.rest.vo.cinema.AreaVO">
+        <id column="UUID" property="areaId"/>
+        <result column="show_name" property="areaName"/>
+    </resultMap>
+    <select id="getAreaConditionList" resultMap="AreaMap">
+        SELECT UUID,show_name FROM `mtime_area_dict_t`;
     </select>
 
 </mapper>

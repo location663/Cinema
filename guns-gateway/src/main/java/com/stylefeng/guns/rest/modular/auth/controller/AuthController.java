@@ -53,11 +53,18 @@ public class AuthController {
             throw new GunsException(BizExceptionEnum.AUTH_REQUEST_ERROR);
         }
 
+        String oldToken = (String) redisTemplate.opsForValue().get(userVO.getUserName());
+        if (oldToken != null){
+            redisTemplate.opsForValue().set(oldToken,null);
+            redisTemplate.delete(oldToken);
+        }
+
         // 生成randomKey
         final String randomKey = jwtTokenUtil.getRandomKey();
         final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
 
         redisTemplate.opsForValue().set(token,userVO);
+        redisTemplate.opsForValue().set(userVO.getUserName(),token);
         redisTemplate.expire(token,5 * 60, TimeUnit.SECONDS);
 
         ResponseEntity<AuthResponse> ok = ResponseEntity.ok(new AuthResponse(token, randomKey));

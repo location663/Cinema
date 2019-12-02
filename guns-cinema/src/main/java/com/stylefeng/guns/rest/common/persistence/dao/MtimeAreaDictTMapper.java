@@ -2,6 +2,7 @@ package com.stylefeng.guns.rest.common.persistence.dao;
 
 import com.stylefeng.guns.rest.common.persistence.model.MtimeAreaDictT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.stylefeng.guns.rest.vo.cinema.AreaVO;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,6 @@ import java.util.ArrayList;
  */
 public interface MtimeAreaDictTMapper extends BaseMapper<MtimeAreaDictT> {
 
-    ArrayList<MtimeAreaDictT> getAreaConditionList();
+    ArrayList<AreaVO> getAreaConditionList();
 
 }

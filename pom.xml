@@ -18,6 +18,7 @@
         <module>guns-cinema</module>
         <module>guns-user</module>
         <module>guns-gateway</module>
+        <module>guns-order</module>
     </modules>
 
     <parent>
