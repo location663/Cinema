@@ -20,16 +20,17 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
 
     private static final long serialVersionUID = 1L;
 
+
     /**
      * 主键编号
      */
     @TableId(value = "UUID", type = IdType.AUTO)
-    private Integer uuid;
+    private Integer halltypeId;
     /**
      * 显示名称
      */
     @TableField("show_name")
-    private String showName;
+    private String halltypeName;
     /**
      * 座位文件存放地址
      */
@@ -37,20 +38,20 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
     private String seatAddress;
 
 
-    public Integer getUuid() {
-        return uuid;
+    public Integer getHalltypeId() {
+        return halltypeId;
     }
 
-    public void setUuid(Integer uuid) {
-        this.uuid = uuid;
+    public void setHalltypeId(Integer halltypeId) {
+        this.halltypeId = halltypeId;
     }
 
-    public String getShowName() {
-        return showName;
+    public String getHalltypeName() {
+        return halltypeName;
     }
 
-    public void setShowName(String showName) {
-        this.showName = showName;
+    public void setHalltypeName(String halltypeName) {
+        this.halltypeName = halltypeName;
     }
 
     public String getSeatAddress() {
@@ -63,15 +64,15 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
 
     @Override
     protected Serializable pkVal() {
-        return this.uuid;
+        return this.halltypeId;
     }
 
     @Override
     public String toString() {
         return "MtimeHallDictT{" +
-        "uuid=" + uuid +
-        ", showName=" + showName +
-        ", seatAddress=" + seatAddress +
-        "}";
+                ", halltypeId=" + halltypeId +
+                ", halltypeName='" + halltypeName + '\'' +
+                ", seatAddress='" + seatAddress + '\'' +
+                '}';
     }
 }

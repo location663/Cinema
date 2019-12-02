@@ -2,6 +2,9 @@ package com.stylefeng.guns.rest.common.persistence.dao;
 
 import com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.stylefeng.guns.rest.vo.cinema.HallTypeVO;
+
+import java.util.ArrayList;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface MtimeHallDictTMapper extends BaseMapper<MtimeHallDictT> {
 
+    ArrayList<HallTypeVO> getHallCondition();
 }

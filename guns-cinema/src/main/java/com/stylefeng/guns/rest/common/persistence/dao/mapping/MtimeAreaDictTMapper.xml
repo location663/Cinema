@@ -4,8 +4,18 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeAreaDictT">
-        <id column="UUID" property="uuid" />
-        <result column="show_name" property="showName" />
+        <id column="UUID" property="areaId" />
+        <result column="show_name" property="areaName" />
+        <!--<result column="active" property="active"/>-->
     </resultMap>
+
+    <!--自己写的-->
+    <resultMap id="AreaMap" type="com.stylefeng.guns.rest.vo.cinema.AreaVO">
+        <id column="UUID" property="areaId"/>
+        <result column="show_name" property="areaName"/>
+    </resultMap>
+    <select id="getAreaConditionList" resultMap="AreaMap">
+        SELECT UUID,show_name FROM `mtime_area_dict_t`;
+    </select>
 
 </mapper>

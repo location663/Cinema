@@ -2,10 +2,12 @@ package com.stylefeng.guns.rest.common.aop;
 
 import com.stylefeng.guns.core.aop.BaseControllerExceptionHandler;
 import com.stylefeng.guns.core.base.tips.ErrorTip;
+import com.stylefeng.guns.rest.common.exception.*;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.common.exception.CinemaException;
 import com.stylefeng.guns.rest.common.exception.CinemaParameterException;
-import com.stylefeng.guns.rest.common.exception.CinemaExceptionEnum;
+import com.stylefeng.guns.rest.exception.CinemaBusinessException;
+import com.stylefeng.guns.rest.exception.CinemaExceptionEnum;
 import com.stylefeng.guns.rest.vo.ErrorResponVO;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
@@ -42,12 +44,22 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
     public ErrorResponVO cinemaParameterException(CinemaParameterException e){
         return new ErrorResponVO(CinemaExceptionEnum.PARAMETER_ERROR.getStatus(), CinemaExceptionEnum.PARAMETER_ERROR.getMsg());
     }
-
+    @ExceptionHandler(CinemaBusinessException.class)
+    @ResponseBody
+    public ErrorResponVO busnessException(CinemaBusinessException e) {
+        return new ErrorResponVO(CinemaExceptionEnum.BUSINESS_ERROR.getStatus(), CinemaExceptionEnum.BUSINESS_ERROR.getMsg());
+    }
     @ExceptionHandler(CinemaException.class)
     @ResponseBody
-    public ErrorResponVO cinemaException(CinemaException e){
+    public ErrorResponVO cinemaException(CinemaException e) {
         return new ErrorResponVO(e.getStatus(), e.getMsg());
+    }
 
+
+    @ExceptionHandler(CinemaQueryFailException.class)
+    @ResponseBody
+    public ErrorResponVO Exception(CinemaQueryFailException e){
+        return new ErrorResponVO(CinemaExceptionEnum.CINEMA_QUERY_ERROR.getStatus(), CinemaExceptionEnum.CINEMA_QUERY_ERROR.getMsg());
     }
 
     @ExceptionHandler(Exception.class)
@@ -55,4 +67,6 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
     public ErrorResponVO Exception(Exception e){
         return new ErrorResponVO(CinemaExceptionEnum.USER_AUTH_ERROR.getStatus(), CinemaExceptionEnum.USER_AUTH_ERROR.getMsg());
     }
+
+
 }

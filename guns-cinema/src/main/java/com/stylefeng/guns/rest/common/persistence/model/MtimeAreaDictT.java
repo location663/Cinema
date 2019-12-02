@@ -24,40 +24,40 @@ public class MtimeAreaDictT extends Model<MtimeAreaDictT> {
      * 主键编号
      */
     @TableId(value = "UUID", type = IdType.AUTO)
-    private Integer uuid;
+    private Integer areaId;
     /**
      * 显示名称
      */
     @TableField("show_name")
-    private String showName;
+    private String areaName;
 
-
-    public Integer getUuid() {
-        return uuid;
+    public Integer getAreaId() {
+        return areaId;
     }
 
-    public void setUuid(Integer uuid) {
-        this.uuid = uuid;
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
     }
 
-    public String getShowName() {
-        return showName;
+    public String getAreaName() {
+        return areaName;
     }
 
-    public void setShowName(String showName) {
-        this.showName = showName;
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     @Override
     protected Serializable pkVal() {
-        return this.uuid;
+        return this.areaId;
     }
+
 
     @Override
     public String toString() {
         return "MtimeAreaDictT{" +
-        "uuid=" + uuid +
-        ", showName=" + showName +
-        "}";
+                ", areaId=" + areaId +
+                ", areaName='" + areaName + '\'' +
+                '}';
     }
 }
