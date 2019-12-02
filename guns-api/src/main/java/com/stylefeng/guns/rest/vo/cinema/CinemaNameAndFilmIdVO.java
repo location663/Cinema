@@ -23,11 +23,12 @@ public class CinemaNameAndFilmIdVO implements Serializable {
     private Integer price;
 
     private String cinemaName;
+    private String seatAddress;
 
     public CinemaNameAndFilmIdVO() {
     }
 
-    public CinemaNameAndFilmIdVO(Integer cinemaId, Integer filmId, String beginTime, String endTime, Integer hallId, String hallName, Integer price, String cinemaName) {
+    public CinemaNameAndFilmIdVO(Integer cinemaId, Integer filmId, String beginTime, String endTime, Integer hallId, String hallName, Integer price, String cinemaName, String seatAddress) {
         this.cinemaId = cinemaId;
         this.filmId = filmId;
         this.beginTime = beginTime;
@@ -36,5 +37,6 @@ public class CinemaNameAndFilmIdVO implements Serializable {
         this.hallName = hallName;
         this.price = price;
         this.cinemaName = cinemaName;
+        this.seatAddress = seatAddress;
     }
 }
