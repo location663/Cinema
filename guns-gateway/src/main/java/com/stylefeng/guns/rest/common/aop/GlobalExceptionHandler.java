@@ -44,17 +44,18 @@ public class GlobalExceptionHandler extends BaseControllerExceptionHandler {
     public ErrorResponVO cinemaParameterException(CinemaParameterException e){
         return new ErrorResponVO(CinemaExceptionEnum.PARAMETER_ERROR.getStatus(), CinemaExceptionEnum.PARAMETER_ERROR.getMsg());
     }
+
     @ExceptionHandler(CinemaBusinessException.class)
     @ResponseBody
     public ErrorResponVO busnessException(CinemaBusinessException e) {
         return new ErrorResponVO(CinemaExceptionEnum.BUSINESS_ERROR.getStatus(), CinemaExceptionEnum.BUSINESS_ERROR.getMsg());
     }
+
     @ExceptionHandler(CinemaException.class)
     @ResponseBody
     public ErrorResponVO cinemaException(CinemaException e) {
         return new ErrorResponVO(e.getStatus(), e.getMsg());
     }
-
 
     @ExceptionHandler(CinemaQueryFailException.class)
     @ResponseBody
