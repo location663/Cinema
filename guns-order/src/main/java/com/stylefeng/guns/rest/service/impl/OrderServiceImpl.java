@@ -7,6 +7,7 @@ import com.stylefeng.guns.rest.common.persistence.model.MoocOrderT;
 import com.stylefeng.guns.rest.common.utils.TransferUtils;
 import com.stylefeng.guns.rest.dto.BuyTicketDTO;
 import com.stylefeng.guns.rest.exception.CinemaExceptionEnum;
+import com.stylefeng.guns.rest.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.service.OrderService;
@@ -193,8 +194,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderInfoVO getById(Integer orderId) {
-        MoocOrderT moocOrderT = orderTMapper.selectById(orderId);
+    public OrderInfoVO getById(Integer orderId) throws CinemaParameterException {
+        EntityWrapper<MoocOrderT> orderTEntityWrapper = new EntityWrapper<>();
+        orderTEntityWrapper.eq("uuid", orderId);
+        List<MoocOrderT> moocOrderTS = orderTMapper.selectList(orderTEntityWrapper);
+        if (moocOrderTS.isEmpty()){
+            throw new CinemaParameterException();
+        }
+        MoocOrderT moocOrderT = moocOrderTS.get(0);
         OrderInfoVO orderInfoVO = new OrderInfoVO();
         Integer fieldId = moocOrderT.getFieldId();
         CinemaNameAndFilmIdVO cinemaNameAndFilmIdByFieldId = cinemaService.getCinemaNameAndFilmIdByFieldId(fieldId);

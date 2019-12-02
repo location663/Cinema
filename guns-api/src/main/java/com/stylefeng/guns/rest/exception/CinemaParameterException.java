@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest.common.exception;
+package com.stylefeng.guns.rest.exception;
 
 public class CinemaParameterException extends Exception {
 }

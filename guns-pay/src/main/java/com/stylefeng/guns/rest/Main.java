@@ -1,4 +1,4 @@
-package com.alipay.demo.trade;
+package com.stylefeng.guns.rest;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alipay.api.AlipayResponse;
@@ -6,6 +6,7 @@ import com.alipay.api.domain.TradeFundBill;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.MonitorHeartbeatSynResponse;
+import com.alipay.demo.trade.DemoHbRunner;
 import com.alipay.demo.trade.config.Configs;
 import com.alipay.demo.trade.model.ExtendParams;
 import com.alipay.demo.trade.model.GoodsDetail;
@@ -22,11 +23,13 @@ import com.alipay.demo.trade.service.impl.AlipayTradeServiceImpl;
 import com.alipay.demo.trade.service.impl.AlipayTradeWithHBServiceImpl;
 import com.alipay.demo.trade.utils.Utils;
 import com.alipay.demo.trade.utils.ZxingUtils;
+import com.stylefeng.guns.rest.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.vo.order.OrderInfoVO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -35,6 +38,7 @@ import java.util.*;
  * 简单main函数，用于测试当面付api
  * sdk和demo的意见和问题反馈请联系：liuyang.kly@alipay.com
  */
+@Component
 public class Main {
     private static Log log = LogFactory.getLog(Main.class);
 
@@ -82,7 +86,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CinemaParameterException {
         Main main = new Main();
 
         // 系统商商测试交易保障接口api
@@ -104,7 +108,7 @@ public class Main {
         //        main.test_trade_refund();
 
         // 测试当面付2.0生成支付二维码
-        main.test_trade_precreate();
+        main.test_trade_precreate(27);
     }
 
     // 测试系统商交易保障调度
@@ -372,11 +376,11 @@ public class Main {
     }
 
     // 测试当面付2.0生成支付二维码
-    public void test_trade_precreate(Integer orderId) {
+    public String test_trade_precreate(Integer id) throws CinemaParameterException {
         // (必填) 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
         // 需保证商户系统端不能重复，建议通过数据库sequence生成，
-        String outTradeNo = "tradeprecreate" + orderId;
-
+        String outTradeNo = "tradeprecreate" + id;
+        int orderId = id;
         OrderInfoVO orderInfoVO = orderService.getById(orderId);
 
 
@@ -399,7 +403,7 @@ public class Main {
 
         // 订单描述，可以对交易或商品进行一个详细地描述，比如填写"购买商品2件共15.00元"
 //        String body = "购买商品3件共20.00元";
-        String body = "共"+ orderInfoVO.getOrderPrice() +"元";
+        String body = orderInfoVO.getQuantity() + "张电影票共"+ orderInfoVO.getOrderPrice() +"元";
 
         // 商户操作员编号，添加此参数可以为商户操作员做销售统计
         String operatorId = "test_operator_id";
@@ -417,7 +421,8 @@ public class Main {
         // 商品明细列表，需填写购买商品详细信息，
         List<GoodsDetail> goodsDetailList = new ArrayList<GoodsDetail>();
         // 创建一个商品信息，参数含义分别为商品id（使用国标）、名称、单价（单位为分）、数量，如果需要添加商品类别，详见GoodsDetail
-        GoodsDetail goods1 = GoodsDetail.newInstance("goods_id001", orderInfoVO.getFilmName(), orderInfoVO.get, 1);
+        double v = orderInfoVO.getFilmPrice() * 100;
+        GoodsDetail goods1 = GoodsDetail.newInstance("goods_id001", orderInfoVO.getFilmName(), (long)v, orderInfoVO.getQuantity());
         // 创建好一个商品后添加至商品明细列表
         goodsDetailList.add(goods1);
 
@@ -443,11 +448,11 @@ public class Main {
                 dumpResponse(response);
 
                 // 需要修改为运行机器上的路径
-                String filePath = String.format("/Users/sudo/Desktop/qr-%s.png",
+                String filePath = String.format("E:\\develop\\nginx-1.15.12\\html\\pics\\qr-%s.png",
                     response.getOutTradeNo());
                 log.info("filePath:" + filePath);
-                //                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
-                break;
+                ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
+                return filePath;
 
             case FAILED:
                 log.error("支付宝预下单失败!!!");
@@ -461,5 +466,6 @@ public class Main {
                 log.error("不支持的交易状态，交易返回异常!!!");
                 break;
         }
+        return null;
     }
 }

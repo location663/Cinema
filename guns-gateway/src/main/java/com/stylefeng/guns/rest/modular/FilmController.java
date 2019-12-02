@@ -2,7 +2,7 @@ package com.stylefeng.guns.rest.modular;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.stylefeng.guns.rest.common.exception.CinemaParameterException;
+import com.stylefeng.guns.rest.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.FilmRequestVO;
