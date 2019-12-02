@@ -279,7 +279,7 @@ public class CinemaServiceImpl implements CinemaService {
                 FilmFieldVO filmFieldVO = new FilmFieldVO();
                 filmFieldVO.setBeginTime(mtimeFieldT.getBeginTime());
                 filmFieldVO.setEndTime(mtimeFieldT.getEndTime());
-                filmFieldVO.setFieldId(mtimeFieldT.getHallId());
+                filmFieldVO.setFieldId(mtimeFieldT.getUuid());    
                 filmFieldVO.setHallName(mtimeFieldT.getHallName());
                 filmFieldVO.setPrice(mtimeFieldT.getPrice());
                 EntityWrapper<MtimeHallFilmInfoT> hallFilmInfoTEntityWrapper = new EntityWrapper<>();
