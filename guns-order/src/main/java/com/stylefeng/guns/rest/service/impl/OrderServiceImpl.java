@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Service(interfaceClass = OrderService.class)
@@ -77,7 +78,13 @@ public class OrderServiceImpl implements OrderService {
 //        sb.deleteCharAt(sb.length() - 1);
 //        moocOrderT.setSeatsName(sb.toString());
 
-        SeatsVO seatsFromFront = GetSeats.getSeatsFromFront("http://localhost:1818/json/4dx.json");
+        String seatAddress = cinemaNameAndFilmIdByFieldId.getSeatAddress();
+        SeatsVO seatsFromFront = (SeatsVO) redisTemplate.opsForValue().get(seatAddress);
+        if (null == seatsFromFront) {
+            seatsFromFront = GetSeats.getSeatsFromFront("http://localhost:1818" + seatAddress);
+            redisTemplate.opsForValue().set(seatAddress, seatsFromFront);
+            redisTemplate.expire(seatAddress,5 * 60, TimeUnit.HOURS);
+        }
         String[] seatIds = seatsFromFront.getIds().split(",");
         SeatVO[][] single = seatsFromFront.getSingle();
         SeatVO[][] couple = seatsFromFront.getCouple();
@@ -140,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
         }
         Integer id = orderTMapper.selectLastInsertId();
         orderInfoVO.setCinemaName(cinemaNameAndFilmIdByFieldId.getCinemaName());
-        orderInfoVO.setFieldTime(TransferUtils.parseDate2String(moocOrderT.getOrderTime()));
+        orderInfoVO.setFieldTime(TransferUtils.parseDate2String2(new Date()) + " " + cinemaNameAndFilmIdByFieldId.getBeginTime());
         orderInfoVO.setFilmName(filmService.getFilmByFilmId(cinemaNameAndFilmIdByFieldId.getFilmId()).getFilmName());
         orderInfoVO.setOrderId(id.toString());
         orderInfoVO.setOrderPrice(moocOrderT.getOrderPrice().toString());
@@ -168,32 +175,40 @@ public class OrderServiceImpl implements OrderService {
     public String getSoldSeatsByFieldId(Integer fieldId) {
         EntityWrapper<MoocOrderT> orderTEntityWrapper = new EntityWrapper<>();
         orderTEntityWrapper.eq("field_id", fieldId);
+        Integer[] array = new Integer[2];
+        array[0] = 0;
+        array[1] = 1;
+        orderTEntityWrapper.in("order_status", array);
         List<MoocOrderT> moocOrderTS = orderTMapper.selectList(orderTEntityWrapper);
-        StringBuilder sb = new StringBuilder();
-        for (MoocOrderT moocOrderT : moocOrderTS) {
-            sb.append(moocOrderT.getSeatsIds() + ",");
+        if (!moocOrderTS.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (MoocOrderT moocOrderT : moocOrderTS) {
+                sb.append(moocOrderT.getSeatsIds() + ",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            return sb.toString();
+        } else {
+            return "";
         }
-        sb.deleteCharAt(sb.length() - 1);
-        return sb.toString();
     }
 
     private List<OrderInfoVO> orderDO2OrderInfo(List<Map<String, Object>> maps) {
         ArrayList<OrderInfoVO> orderInfoVOS = new ArrayList<>();
         for (Map<String, Object> map : maps) {
             OrderInfoVO orderInfoVO = new OrderInfoVO();
-            CinemaNameAndFilmIdVO fieldInfo = cinemaService.getCinemaNameAndFilmIdByFieldId((Integer) map.get("field_id"));
+            CinemaNameAndFilmIdVO fieldInfo = cinemaService.getCinemaNameAndFilmIdByFieldId((Integer) map.get("fieldId"));
             orderInfoVO.setCinemaName(fieldInfo.getCinemaName());
-
-            Integer uuid = (Integer) map.get("UUID");
+            orderInfoVO.setFieldTime(TransferUtils.parseDate2String2(new Date()) + " " + fieldInfo.getBeginTime());
+            Integer uuid = (Integer) map.get("uuid");
             orderInfoVO.setOrderId(uuid.toString());
-            Double order_price = (Double) map.get("order_price");
+            Double order_price = (Double) map.get("orderPrice");
             orderInfoVO.setOrderPrice(order_price.toString());
             Integer status = (Integer) map.get("orderStatus");
             orderInfoVO.setOrderStatus(orderStatus[status]);
-            Date order_time = (Date) map.get("order_time");
-            Long time = order_time.getTime();
+            Date order_time = (Date) map.get("orderTime");
+            Long time = order_time.getTime() / 1000;
             orderInfoVO.setOrderTimestamp(time.toString());
-            String seats_name = (String) map.get("seats_ids");
+            String seats_name = (String) map.get("seatsIds");
             orderInfoVO.setSeatsName(seats_name);
             orderInfoVOS.add(orderInfoVO);
         }
