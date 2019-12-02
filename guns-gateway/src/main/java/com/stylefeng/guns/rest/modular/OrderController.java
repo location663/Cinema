@@ -47,4 +47,14 @@ public class OrderController {
         BaseResponVO baseResponVO = orderService.getOrderInfo(nowPage,pageSize,userVO);
         return baseResponVO;
     }
+
+    /**
+     * 支付接口
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("getPayInfo")
+    public BaseResponVO getPayInfo(Integer orderId){
+        return null;
+    }
 }

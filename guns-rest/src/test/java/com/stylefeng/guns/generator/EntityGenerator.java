@@ -29,13 +29,13 @@ public class EntityGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("E:\\develop\\git-repository\\cinema\\Cinema\\guns-order\\src\\main\\java");//这里写你自己的java目录
+        gc.setOutputDir("D:\\17th_allcourse\\17th_microservice\\cinemaProject\\Cinema\\guns-pay\\src\\main\\java");//这里写你自己的java目录
         gc.setFileOverride(true);//是否覆盖
         gc.setActiveRecord(true);
         gc.setEnableCache(false);// XML 二级缓存
         gc.setBaseResultMap(true);// XML ResultMap
-        gc.setBaseColumnList(false);// XML columList
-        gc.setAuthor("ali");
+        gc.setBaseColumnList(false);// XML columListgit
+        gc.setAuthor("db");
         mpg.setGlobalConfig(gc);
 
         // 数据源配置
@@ -67,9 +67,9 @@ public class EntityGenerator {
         pc.setEntity("com.stylefeng.guns.rest.common.persistence.model");
         pc.setMapper("com.stylefeng.guns.rest.common.persistence.dao");
         pc.setXml("com.stylefeng.guns.rest.common.persistence.dao.mapping");
-//        pc.setService("com.stylefeng.guns.rest.service");       //本项目没用，生成之后删掉
-//        pc.setServiceImpl("com.stylefeng.guns.rest.service.impl");   //本项目没用，生成之后删掉
-//        pc.setController("com.stylefeng.guns.rest.modular");    //本项目没用，生成之后删掉
+        pc.setService("com.stylefeng.guns.rest.service");       //本项目没用，生成之后删掉
+        pc.setServiceImpl("com.stylefeng.guns.rest.service.impl");   //本项目没用，生成之后删掉
+        pc.setController("com.stylefeng.guns.rest.modular");    //本项目没用，生成之后删掉
         mpg.setPackageInfo(pc);
 
         // 注入自定义配置，可以在 VM 中使用 cfg.abc 设置的值
