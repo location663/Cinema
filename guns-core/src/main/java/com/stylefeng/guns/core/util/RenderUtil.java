@@ -24,7 +24,9 @@ public class RenderUtil {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             PrintWriter writer = response.getWriter();
+//            writer.write(JSON.toJSONString(jsonObject));
             writer.write(JSON.toJSONString(jsonObject));
+
         } catch (IOException e) {
             throw new GunsException(GunsExceptionEnum.WRITE_ERROR);
         }

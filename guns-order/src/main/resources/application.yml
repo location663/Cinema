@@ -28,7 +28,7 @@ spring:
     server: true
     protocol:
       name: dubbo
-      port: 20890
+      port: 20950
 
 logging:
   level.root: info

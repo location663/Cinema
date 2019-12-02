@@ -6,14 +6,13 @@ public enum CinemaExceptionEnum {
 
     USER_AUTH_ERROR(999,"系统出现异常，请联系管理员"),
 
-
     TOKEN_ERROR(1, "退出失败，用户尚未登陆"),
 
+    BUSINESS_ERROR(1,"业务异常"),
 
-    Business_ERROR(1,"业务异常"),
+    CINEMA_QUERY_ERROR(1, "影院信息查询失败"),
 
-
-    CINEMA_QUERY_ERROR(1, "影院信息查询失败");
+    BUYTICKETS_ERROR(1, "购票失败");
 
     private Integer status;
     private String msg;

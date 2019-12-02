@@ -8,6 +8,7 @@ import com.stylefeng.guns.rest.common.persistence.model.MtimeUserT;
 import com.stylefeng.guns.rest.dto.UserRegisterDTO;
 import com.stylefeng.guns.rest.service.UserService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
+import com.stylefeng.guns.rest.vo.ErrorResponVO;
 import com.stylefeng.guns.rest.vo.user.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,11 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    /**退出登录
+     * @param token
+     * @return
+     * @throws CinemaException
+     */
     @Override
     public BaseResponVO userLogout(String token) throws CinemaException {
         //先判断token
@@ -108,24 +114,42 @@ public class UserServiceImpl implements UserService {
         if(o == null){
             throw new CinemaException(1, "退出失败，用户尚未登陆");
         }
-        //确定token存在，从redis中删除token
+        //确定token存在，从redis中删除以token为key,userVO为value的数据
         Boolean delete = redisTemplate.delete(token);
         if(delete == false){
+            throw new CinemaException(999,"系统出现异常，请联系管理员");
+        }
+        //从redis中删除以userName为key,token为value的数据
+        UserVO userVO = (UserVO) o;
+        Boolean delete1 = redisTemplate.delete(userVO.getUserName());
+        if(delete1 == false){
             throw new CinemaException(999,"系统出现异常，请联系管理员");
         }
         return new BaseResponVO(0, "成功退出");
     }
 
+    /**用户查询
+     * @param token
+     * @return
+     * @throws CinemaException
+     */
     @Override
     public BaseResponVO getUserInfo(String token) throws CinemaException {
         Object o = redisTemplate.opsForValue().get(token);
         if(o == null){
-            throw new CinemaException(1, "查询失败，用户尚未登陆");
+//            throw new CinemaException(1, "查询失败，用户尚未登陆");
+            return new ErrorResponVO(700, "未登录");
         }
         UserVO userVO = (UserVO) o;
         return new BaseResponVO(0, null, userVO, null, null, null);
     }
 
+    /**修改用户信息
+     * @param token
+     * @param userVO
+     * @return
+     * @throws CinemaException
+     */
     @Override
     public BaseResponVO updateUserInfo(String token, UserVO userVO) throws CinemaException {
         Object o = redisTemplate.opsForValue().get(token);

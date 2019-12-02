@@ -69,6 +69,7 @@ public class AuthFilter extends OncePerRequestFilter {
 //                    RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
                     RenderUtil.renderJson(response, new ErrorResponVO(700,"未登录"));
 //                    response.sendRedirect("http://localhost:1818/login");
+
                     return;
                 }
                 redisTemplate.expire(authToken,5 * 60, TimeUnit.SECONDS);
@@ -77,6 +78,7 @@ public class AuthFilter extends OncePerRequestFilter {
                 RenderUtil.renderJson(response, new ErrorResponVO(700,"未登录"));
 //                RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
 //                response.setHeader("refresh","2;url=http://localhost:1818/login");
+
                 return;
             }
 

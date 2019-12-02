@@ -1,6 +1,7 @@
 package com.stylefeng.guns.rest.modular;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.dto.BuyTicketDTO;
 import com.stylefeng.guns.core.support.HttpKit;
 import com.stylefeng.guns.rest.service.OrderService;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
@@ -20,6 +21,15 @@ public class OrderController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @RequestMapping("buyTickets")
+    public BaseResponVO buyTickets(BuyTicketDTO buyTicketDTO){
+        String token = HttpKit.getRequest().getHeader("Authorization").substring(7);
+        Object object =  redisTemplate.opsForValue().get(token);
+        UserVO userVO = (UserVO) object;
+        BaseResponVO baseResponVO = orderService.insertOrder(buyTicketDTO, userVO);
+        return baseResponVO;
+    }
 
     /**
      * 获取用户订单信息
