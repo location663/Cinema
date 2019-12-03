@@ -5,4 +5,6 @@ import com.stylefeng.guns.rest.vo.BaseResponVO;
 
 public interface PayService {
     BaseResponVO getPayInfo(Integer orderId) throws CinemaParameterException;
+
+    BaseResponVO getPayResult(Integer orderId) throws CinemaParameterException;
 }

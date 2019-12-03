@@ -5,6 +5,7 @@
 test/
 target/
 logs/
+com/stylefeng/guns/rest/Main.java
 
 # Log file
 *.log
