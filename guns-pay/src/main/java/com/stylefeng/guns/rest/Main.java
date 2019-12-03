@@ -294,9 +294,9 @@ public class Main {
     }
 
     // 测试当面付2.0查询订单
-    public void test_trade_query() {
+    public void test_trade_query(Integer id) {
         // (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
-        String outTradeNo = "tradepay14817938139942440181";
+        String outTradeNo = "tradeprecreate" + id;
 
         // 创建查询请求builder，设置请求参数
         AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
@@ -448,7 +448,7 @@ public class Main {
                 dumpResponse(response);
 
                 // 需要修改为运行机器上的路径
-                String filePath = String.format("E:\\develop\\nginx-1.15.12\\html\\pics\\qr-%s.png",
+                String filePath = String.format("C:\\Users\\Administrator\\Desktop\\img\\qr-%s.png",
                     response.getOutTradeNo());
                 log.info("filePath:" + filePath);
                 ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
