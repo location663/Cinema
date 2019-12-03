@@ -20,6 +20,7 @@
         <module>guns-gateway</module>
         <module>guns-order</module>
         <module>guns-pay</module>
+        <module>guns-seckill</module>
     </modules>
 
     <parent>

@@ -18,4 +18,9 @@ public class PayController {
         BaseResponVO baseResponVO = payService.getPayInfo(orderId);
         return baseResponVO;
     }
+
+    @RequestMapping("order/getPayResult")
+    public BaseResponVO getPayResult(Integer orderId, Integer tryNums) throws CinemaParameterException {
+        return payService.getPayResult(orderId);
+    }
 }
