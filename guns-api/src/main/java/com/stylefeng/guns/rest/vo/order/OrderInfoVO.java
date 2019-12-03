@@ -16,4 +16,5 @@ public class OrderInfoVO implements Serializable {
     private String seatsName;
     private Double filmPrice;
     private Integer quantity;
+    private String orderMsg;
 }

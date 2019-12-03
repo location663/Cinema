@@ -7,7 +7,10 @@ import com.stylefeng.guns.rest.vo.cinema.CinemaGetCinemasVO;
 
 import com.stylefeng.guns.rest.vo.cinema.CinemaNameAndFilmIdVO;
 
+import com.stylefeng.guns.rest.vo.cinema.CinemaPartVO;
 import com.stylefeng.guns.rest.vo.cinema.FieldInfo;
+
+import java.util.List;
 
 public interface CinemaService {
 
@@ -20,4 +23,6 @@ public interface CinemaService {
     FieldInfo getFields(Integer cinemaId) throws CinemaQueryFailException;
 
     CinemaNameAndFilmIdVO getCinemaNameAndFilmIdByFieldId(Integer fieldId);
+
+    List<CinemaPartVO> getPartOfCinemasValue(CinemaGetCinemasVO cinemaGetCinemasVO);
 }

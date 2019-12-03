@@ -66,6 +66,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
                     return;
                 }
+//              刷新时间
                 redisTemplate.expire(authToken,5 * 60, TimeUnit.SECONDS);
             } catch (JwtException e) {
                 //有异常就是token解析失败

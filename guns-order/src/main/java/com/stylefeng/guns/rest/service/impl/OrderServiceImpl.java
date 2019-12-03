@@ -86,9 +86,15 @@ public class OrderServiceImpl implements OrderService {
         SeatVO[][] couple = seatsFromFront.getCouple();
 
         StringBuilder sb = new StringBuilder();
+        String soldSeatsByFieldId = getSoldSeatsByFieldId(buyTicketDTO.getFieldId());
+        String[] soldSeatsArray = soldSeatsByFieldId.split(",");
 
         for (String seat : seats) {
-
+            for (String s : soldSeatsArray) {
+                if (s.equals(seat)){
+                    return new ErrorResponVO(CinemaExceptionEnum.PARAMETER_ERROR.getStatus(), CinemaExceptionEnum.PARAMETER_ERROR.getMsg());
+                }
+            }
             if (!seat.matches("^[1-9]\\d*$") || Integer.parseInt(seat) > Integer.parseInt(seatIds[seatIds.length-1])){
                 return new ErrorResponVO(CinemaExceptionEnum.PARAMETER_ERROR.getStatus(), CinemaExceptionEnum.PARAMETER_ERROR.getMsg());
             }
@@ -186,6 +192,11 @@ public class OrderServiceImpl implements OrderService {
         String seatsIds = moocOrderT.getSeatsIds();
         String[] split = seatsIds.split(",");
         orderInfoVO.setQuantity(split.length);
+        if (orderInfoVO.getOrderStatus().equals("1")){
+            orderInfoVO.setOrderMsg("支付成功");
+        } else {
+            orderInfoVO.setOrderMsg("订单支付失败，请稍后重试");
+        }
         return orderInfoVO;
     }
 
