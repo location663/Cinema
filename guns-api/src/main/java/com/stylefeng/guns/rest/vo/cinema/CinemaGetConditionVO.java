@@ -22,4 +22,10 @@ public class CinemaGetConditionVO {
     @Min(value = 1,message = "区域参数出错")
     private Integer areaId = 99;
 
+    @Min(value = 1,message = "页码参数错误")
+    private Integer pageSize;
+
+    @Min(value = 1,message = "页码参数出错")
+    private Integer nowPage;
+
 }

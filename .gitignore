@@ -6,6 +6,7 @@ test/
 target/
 logs/
 com/stylefeng/guns/rest/Main.java
+guns-pay/src/main/resources/zfbinfo.properties
 
 # Log file
 *.log
