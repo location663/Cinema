@@ -27,7 +27,7 @@ public class PayServiceImpl implements PayService {
     @Override
     public BaseResponVO getPayInfo(Integer orderId) throws CinemaParameterException {
         String s = alipay.test_trade_precreate(orderId);
-        int pics = s.indexOf("pics");
+        int pics = s.indexOf("img");
         s = s.substring(pics);
         HashMap<String, String> map = new HashMap<>();
         map.put("orderId", orderId.toString());

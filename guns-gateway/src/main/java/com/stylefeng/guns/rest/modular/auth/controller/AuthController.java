@@ -67,7 +67,8 @@ public class AuthController {
 
         redisTemplate.opsForValue().set(token,userVO);
         redisTemplate.opsForValue().set(userVO.getUserName(),token);
-        redisTemplate.expire(token,5 * 60, TimeUnit.SECONDS);
+        redisTemplate.expire(token,5 * 60 * 60 * 24, TimeUnit.SECONDS);
+        redisTemplate.expire(userVO.getUserName(),5 * 60 * 60 * 24, TimeUnit.SECONDS);
 
         ResponseEntity<AuthResponse> ok = ResponseEntity.ok(new AuthResponse(token, randomKey));
         AuthResponse body = ok.getBody();

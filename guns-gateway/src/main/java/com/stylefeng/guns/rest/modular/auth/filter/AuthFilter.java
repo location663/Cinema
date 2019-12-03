@@ -4,6 +4,7 @@ package com.stylefeng.guns.rest.modular.auth.filter;
 import com.stylefeng.guns.core.util.RenderUtil;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.vo.ErrorResponVO;
+import com.stylefeng.guns.rest.vo.user.UserVO;
 import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -57,8 +58,8 @@ public class AuthFilter extends OncePerRequestFilter {
             authToken = requestHeader.substring(7);
 
             try {
-                Object o = redisTemplate.opsForValue().get(authToken);
-                if (o == null) {
+                UserVO user = (UserVO) redisTemplate.opsForValue().get(authToken);
+                if (user == null) {
                     // o为null 时说明token已过期
 //                    RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
                     RenderUtil.renderJson(response, new ErrorResponVO(700,"未登录"));
@@ -66,8 +67,13 @@ public class AuthFilter extends OncePerRequestFilter {
 
                     return;
                 }
+<<<<<<< HEAD
 //              刷新时间
                 redisTemplate.expire(authToken,5 * 60, TimeUnit.SECONDS);
+=======
+                redisTemplate.expire(authToken,5 * 60 * 60 * 24, TimeUnit.SECONDS);
+                redisTemplate.expire(user.getUserName(),5 * 60 * 60 * 24, TimeUnit.SECONDS);
+>>>>>>> b0a58c22bc02e64b6d47dc55993f20ddcdcb1e57
             } catch (JwtException e) {
                 //有异常就是token解析失败
                 RenderUtil.renderJson(response, new ErrorResponVO(700,"未登录"));
