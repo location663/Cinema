@@ -93,14 +93,16 @@ public class UserServiceImpl implements UserService {
         if (mtimeUserTS == null){
             return null;
         }
-        UserVO userVO = new UserVO();
+
+        UserVO userVO = null;
         for (MtimeUserT mtimeUserT : mtimeUserTS) {
             if (password.equals(mtimeUserT.getUserPwd())){
-                BeanUtils.copyProperties(mtimeUserT,userVO);
-                return userVO;
+                userVO = new UserVO();
+                BeanUtils.copyProperties(mtimeUserT, userVO);
             }
         }
-        return null;
+        return userVO;
+
     }
 
     /**退出登录
