@@ -70,7 +70,6 @@ public class UserServiceImpl implements UserService {
         if (count != 0){
             return new BaseResponVO(1,null,null,null,null,"用户已经注册");
         }
-
         return new BaseResponVO(0,null,null,null,null,"用户名不存在");
     }
 

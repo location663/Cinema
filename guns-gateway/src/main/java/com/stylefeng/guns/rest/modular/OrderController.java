@@ -48,5 +48,13 @@ public class OrderController {
         return baseResponVO;
     }
 
-
+    /**
+     * 支付接口
+     * @param orderId
+     * @return
+     */
+    @RequestMapping("getPayInfo")
+    public BaseResponVO getPayInfo(Integer orderId){
+        return null;
+    }
 }

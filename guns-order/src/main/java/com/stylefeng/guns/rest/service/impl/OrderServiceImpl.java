@@ -11,6 +11,7 @@ import com.stylefeng.guns.rest.exception.CinemaParameterException;
 import com.stylefeng.guns.rest.service.CinemaService;
 import com.stylefeng.guns.rest.service.FilmService;
 import com.stylefeng.guns.rest.service.OrderService;
+import org.springframework.stereotype.Component;
 import com.stylefeng.guns.rest.util.GetSeats;
 import com.stylefeng.guns.rest.vo.BaseResponVO;
 import com.stylefeng.guns.rest.vo.ErrorResponVO;
@@ -31,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
 
 @Component
 @Service(interfaceClass = OrderService.class)
@@ -71,13 +73,6 @@ public class OrderServiceImpl implements OrderService {
 
         String soldSeats = buyTicketDTO.getSoldSeats();
         String[] seats = soldSeats.split(",");
-//        StringBuilder sb = new StringBuilder();
-//        for (String seat : seats) {
-//            int i = Integer.parseInt(seat);
-//            sb.append("第" + seatString[i / 10] + "排" + (i % 10) + "座,");
-//        }
-//        sb.deleteCharAt(sb.length() - 1);
-//        moocOrderT.setSeatsName(sb.toString());
 
         String seatAddress = cinemaNameAndFilmIdByFieldId.getSeatAddress();
         SeatsVO seatsFromFront = (SeatsVO) redisTemplate.opsForValue().get(seatAddress);
@@ -104,32 +99,6 @@ public class OrderServiceImpl implements OrderService {
                 return new ErrorResponVO(CinemaExceptionEnum.PARAMETER_ERROR.getStatus(), CinemaExceptionEnum.PARAMETER_ERROR.getMsg());
             }
             int seatId = Integer.parseInt(seat);
-//            int temp = seatId;
-//            for (int i = 0; i < single.length; i++) {
-//                if (temp > single[i].length){
-//                    temp -= single[i].length;
-//                } else {
-//                    for (int j = 0; j < single[i].length; j++) {
-//                        if (single[i][j].getSeatId() == seatId){
-//                            sb.append("第" + seatString[single[i][j].getRow()] + "排" + single[i][j].getColumn() + "座,");
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//
-//            for (int i = 0; i < couple.length; i++) {
-//                if (temp > couple[i].length){
-//                    temp -= couple[i].length;
-//                } else {
-//                    for (int j = 0; j < couple[i].length; j++) {
-//                        if (couple[i][j].getSeatId() == seatId){
-//                            sb.append("第" + seatString[couple[i][j].getRow()] + "排" + couple[i][j].getColumn() + "座,");
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
             String detailSeat = getDetailSeat(single, seatId);
             if (null != detailSeat){
                 sb.append(detailSeat);

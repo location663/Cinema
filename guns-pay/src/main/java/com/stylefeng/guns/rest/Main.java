@@ -102,13 +102,13 @@ public class Main {
         //        main.test_trade_pay(tradeService);
 
         // 测试查询当面付2.0交易
-        //        main.test_trade_query();
+//                main.test_trade_query();
 
         // 测试当面付2.0退货
         //        main.test_trade_refund();
 
         // 测试当面付2.0生成支付二维码
-        main.test_trade_precreate(27);
+//        main.test_trade_precreate(27);
     }
 
     // 测试系统商交易保障调度
@@ -294,7 +294,7 @@ public class Main {
     }
 
     // 测试当面付2.0查询订单
-    public void test_trade_query(Integer id) {
+    public Integer test_trade_query(Integer id) {
         // (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
         String outTradeNo = "tradeprecreate" + id;
 
@@ -316,19 +316,19 @@ public class Main {
                         log.info(bill.getFundChannel() + ":" + bill.getAmount());
                     }
                 }
-                break;
+                return 1;
 
             case FAILED:
                 log.error("查询返回该订单支付失败或被关闭!!!");
-                break;
+                return 0;
 
             case UNKNOWN:
                 log.error("系统异常，订单支付状态未知!!!");
-                break;
+                return 0;
 
             default:
                 log.error("不支持的交易状态，交易返回异常!!!");
-                break;
+                return 0;
         }
     }
 

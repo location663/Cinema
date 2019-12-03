@@ -70,6 +70,7 @@ public class UserController {
         return baseResponVO;
     }
 
+
     @RequestMapping("updateUserInfo")
     public BaseResponVO updateUserInfo(@RequestBody UserVO userVO) throws CinemaException {
         String token = HttpKit.getRequest().getHeader("Authorization").substring(7);

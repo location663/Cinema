@@ -335,4 +335,44 @@ public class CinemaServiceImpl implements CinemaService {
 
         return cinemaNameAndFilmNameVO;
     }
+
+    /**
+     * 
+     * @param cinemaGetCinemasVO
+     * @return
+     */
+    @Override
+    public List<CinemaPartVO> getPartOfCinemasValue(CinemaGetCinemasVO cinemaGetCinemasVO) {
+        EntityWrapper<MtimeCinemaT> mtimeCinemaTEntityWrapper = new EntityWrapper<MtimeCinemaT>();
+        if (cinemaGetCinemasVO.getAreaId() != 99){
+            mtimeCinemaTEntityWrapper.eq("area_id", cinemaGetCinemasVO.getAreaId());
+        }
+        if (cinemaGetCinemasVO.getBrandId() != 99){
+            mtimeCinemaTEntityWrapper.eq("brand_id", cinemaGetCinemasVO.getBrandId());
+        }
+        if (cinemaGetCinemasVO.getHallType() != 99){
+            mtimeCinemaTEntityWrapper.eq("hall_ids", "#" + cinemaGetCinemasVO.getHallType() + "#");
+        }
+        List<MtimeCinemaT> mtimeCinemaTS = mtimeCinemaTMapper.selectList(mtimeCinemaTEntityWrapper);
+        List<CinemaPartVO> cinemaPartVOList = trans2PartCinemaList(mtimeCinemaTS);
+        return cinemaPartVOList;
+    }
+
+    /**
+     *
+     * @param mtimeCinemaTS
+     * @return
+     */
+    private List<CinemaPartVO> trans2PartCinemaList(List<MtimeCinemaT> mtimeCinemaTS) {
+        ArrayList<CinemaPartVO> cinemaPartVOS = new ArrayList<>();
+        for (MtimeCinemaT mtimeCinemaT : mtimeCinemaTS) {
+            CinemaPartVO cinemaPartVO = new CinemaPartVO();
+            cinemaPartVO.setCinemaAddress(mtimeCinemaT.getCinemaAddress());
+            cinemaPartVO.setCinemaId(mtimeCinemaT.getUuid());
+            cinemaPartVO.setCinemaName(mtimeCinemaT.getCinemaName());
+            cinemaPartVO.setImgAddress(mtimeCinemaT.getImgAddress());
+            cinemaPartVOS.add(cinemaPartVO);
+        }
+        return cinemaPartVOS;
+    }
 }
