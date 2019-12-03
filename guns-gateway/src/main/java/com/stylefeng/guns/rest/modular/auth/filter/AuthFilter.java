@@ -67,13 +67,10 @@ public class AuthFilter extends OncePerRequestFilter {
 
                     return;
                 }
-<<<<<<< HEAD
-//              刷新时间
-                redisTemplate.expire(authToken,5 * 60, TimeUnit.SECONDS);
-=======
+
                 redisTemplate.expire(authToken,5 * 60 * 60 * 24, TimeUnit.SECONDS);
                 redisTemplate.expire(user.getUserName(),5 * 60 * 60 * 24, TimeUnit.SECONDS);
->>>>>>> b0a58c22bc02e64b6d47dc55993f20ddcdcb1e57
+
             } catch (JwtException e) {
                 //有异常就是token解析失败
                 RenderUtil.renderJson(response, new ErrorResponVO(700,"未登录"));
