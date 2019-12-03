@@ -34,4 +34,4 @@ logging:
   level.root: info
   level.com.stylefeng: debug
   path: logs/
-  file: guns-seckill.log
+  file: guns-promo.log
