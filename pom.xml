@@ -19,6 +19,7 @@
         <module>guns-user</module>
         <module>guns-gateway</module>
         <module>guns-order</module>
+        <module>alipay</module>
     </modules>
 
     <parent>
