@@ -35,3 +35,9 @@ logging:
   level.com.stylefeng: debug
   path: logs/
   file: guns-order.log
+
+mq:
+  topic-stock: promo-stock
+  topic-order-status: order-status
+  nameserver:
+    addr: localhost:9876
