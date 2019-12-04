@@ -14,17 +14,17 @@ import java.io.Serializable;
 @Data
 public class CinemaGetCinemasVO implements Serializable {
     @Min(value = 1,message = "品牌参数出错")
-    private Integer brandId = 99;
+    private Integer brandId;
 
     @Min(value = 1,message = "影厅参数出错")
-    private Integer hallType = 99;
+    private Integer hallType;
 
     @Min(value = 1,message = "区域参数出错")
-    private Integer areaId = 99;
+    private Integer areaId;
 
     @Min(value = 1,message = "页面参数出错")
-    private Integer pageSize = 12;
+    private Integer pageSize;
 
     @Min(value = 1,message = "当前页参数出错")
-    private Integer nowPage = 1;
+    private Integer nowPage;
 }

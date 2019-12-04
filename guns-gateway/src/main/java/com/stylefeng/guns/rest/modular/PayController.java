@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PayController {
 
     @Reference(interfaceClass = PayService.class, check = false)
-    PayService payService;
+    private PayService payService;
 
     @RequestMapping("order/getPayInfo")
     public BaseResponVO getPayInfo(Integer orderId) throws CinemaParameterException {

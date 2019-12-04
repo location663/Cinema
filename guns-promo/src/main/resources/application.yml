@@ -28,10 +28,16 @@ spring:
     server: true
     protocol:
       name: dubbo
-      port: 20970
+      port: 20990
 
 logging:
   level.root: info
   level.com.stylefeng: debug
   path: logs/
   file: guns-promo.log
+
+mq:
+  topic-stock: promo-stock
+  topic-order-status: order-status
+  nameserver:
+    addr: localhost:9876

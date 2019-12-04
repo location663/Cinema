@@ -102,13 +102,13 @@ public class Main {
         //        main.test_trade_pay(tradeService);
 
         // 测试查询当面付2.0交易
-//                main.test_trade_query();
+        //        main.test_trade_query();
 
         // 测试当面付2.0退货
         //        main.test_trade_refund();
 
         // 测试当面付2.0生成支付二维码
-//        main.test_trade_precreate(27);
+        main.test_trade_precreate(27);
     }
 
     // 测试系统商交易保障调度
@@ -294,9 +294,9 @@ public class Main {
     }
 
     // 测试当面付2.0查询订单
-    public Integer test_trade_query(Integer id) {
+    public void test_trade_query() {
         // (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
-        String outTradeNo = "tradeprecreate" + id;
+        String outTradeNo = "tradepay14817938139942440181";
 
         // 创建查询请求builder，设置请求参数
         AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
@@ -316,19 +316,19 @@ public class Main {
                         log.info(bill.getFundChannel() + ":" + bill.getAmount());
                     }
                 }
-                return 1;
+                break;
 
             case FAILED:
                 log.error("查询返回该订单支付失败或被关闭!!!");
-                return 0;
+                break;
 
             case UNKNOWN:
                 log.error("系统异常，订单支付状态未知!!!");
-                return 0;
+                break;
 
             default:
                 log.error("不支持的交易状态，交易返回异常!!!");
-                return 0;
+                break;
         }
     }
 
@@ -372,6 +372,45 @@ public class Main {
             default:
                 log.error("不支持的交易状态，交易返回异常!!!");
                 break;
+        }
+    }
+
+    // 测试当面付2.0查询订单
+    public Integer test_trade_query(Integer id) {
+        // (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
+        String outTradeNo = "tradeprecreate" + id;
+
+        // 创建查询请求builder，设置请求参数
+        AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
+                .setOutTradeNo(outTradeNo);
+
+        AlipayF2FQueryResult result = tradeService.queryTradeResult(builder);
+        switch (result.getTradeStatus()) {
+            case SUCCESS:
+                log.info("查询返回该订单支付成功: )");
+
+                AlipayTradeQueryResponse response = result.getResponse();
+                dumpResponse(response);
+
+                log.info(response.getTradeStatus());
+                if (Utils.isListNotEmpty(response.getFundBillList())) {
+                    for (TradeFundBill bill : response.getFundBillList()) {
+                        log.info(bill.getFundChannel() + ":" + bill.getAmount());
+                    }
+                }
+                return 1;
+
+            case FAILED:
+                log.error("查询返回该订单支付失败或被关闭!!!");
+                return 0;
+
+            case UNKNOWN:
+                log.error("系统异常，订单支付状态未知!!!");
+                return 0;
+
+            default:
+                log.error("不支持的交易状态，交易返回异常!!!");
+                return 0;
         }
     }
 
@@ -448,7 +487,7 @@ public class Main {
                 dumpResponse(response);
 
                 // 需要修改为运行机器上的路径
-                String filePath = String.format("C:\\Users\\Administrator\\Desktop\\img\\qr-%s.png",
+                String filePath = String.format("E:\\develop\\nginx-1.15.12\\html\\pics\\qr-%s.png",
                     response.getOutTradeNo());
                 log.info("filePath:" + filePath);
                 ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);

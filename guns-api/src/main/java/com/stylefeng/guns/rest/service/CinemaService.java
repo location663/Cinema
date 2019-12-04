@@ -22,4 +22,6 @@ public interface CinemaService {
     CinemaNameAndFilmIdVO getCinemaNameAndFilmIdByFieldId(Integer fieldId);
 
     List<CinemaPartVO> getPartOfCinemasValue(CinemaGetCinemasVO cinemaGetCinemasVO);
+
+    CinemaPartVO getCinemaInfoById(Integer id);
 }

@@ -29,11 +29,7 @@ public class EntityGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-<<<<<<< HEAD
-        gc.setOutputDir("D:\\17th_allcourse\\17th_microservice\\cinemaProject\\Cinema\\guns-pay\\src\\main\\java");//这里写你自己的java目录
-=======
         gc.setOutputDir("E:\\develop\\git-repository\\mycinema\\Cinema\\guns-seckill\\src\\main\\java");//这里写你自己的java目录
->>>>>>> 5d8559d69a0e484cbde5f4af45680a1b6328e0a7
         gc.setFileOverride(true);//是否覆盖
         gc.setActiveRecord(true);
         gc.setEnableCache(false);// XML 二级缓存

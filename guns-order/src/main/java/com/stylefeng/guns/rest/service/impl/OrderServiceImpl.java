@@ -2,6 +2,7 @@ package com.stylefeng.guns.rest.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.stylefeng.guns.rest.bean.PromoProducer;
 import com.stylefeng.guns.rest.common.persistence.dao.MoocOrderTMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MoocOrderT;
 import com.stylefeng.guns.rest.common.utils.TransferUtils;
@@ -41,7 +42,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private MoocOrderTMapper orderTMapper;
 
-
     @Reference(interfaceClass = CinemaService.class, check = false)
     private CinemaService cinemaService;
 
@@ -50,6 +50,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    private PromoProducer producer;
 
     private String[] orderStatus = {"待支付", "已支付", "已关闭"};
 
@@ -122,6 +125,10 @@ public class OrderServiceImpl implements OrderService {
             return new ErrorResponVO(CinemaExceptionEnum.BUYTICKETS_ERROR.getStatus(), CinemaExceptionEnum.BUYTICKETS_ERROR.getMsg());
         }
         Integer id = orderTMapper.selectLastInsertId();
+
+        // 发布消息给消息队列
+        producer.delayCancle(id);
+
         orderInfoVO.setCinemaName(cinemaNameAndFilmIdByFieldId.getCinemaName());
         orderInfoVO.setFieldTime(TransferUtils.parseDate2String2(new Date()) + " " + cinemaNameAndFilmIdByFieldId.getBeginTime());
         orderInfoVO.setFilmName(filmService.getFilmByFilmId(cinemaNameAndFilmIdByFieldId.getFilmId()).getFilmName());
@@ -134,6 +141,7 @@ public class OrderServiceImpl implements OrderService {
         BaseResponVO baseResponVO = new BaseResponVO();
         baseResponVO.setData(orderInfoVO);
         baseResponVO.setStatus(0);
+
         return baseResponVO;
     }
 

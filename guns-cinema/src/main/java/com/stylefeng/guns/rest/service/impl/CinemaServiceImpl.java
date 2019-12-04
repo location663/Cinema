@@ -358,6 +358,17 @@ public class CinemaServiceImpl implements CinemaService {
         return cinemaPartVOList;
     }
 
+    @Override
+    public CinemaPartVO getCinemaInfoById(Integer id) {
+        MtimeCinemaT mtimeCinemaT = mtimeCinemaTMapper.selectById(id);
+        CinemaPartVO cinemaPartVO = new CinemaPartVO();
+        cinemaPartVO.setCinemaAddress(mtimeCinemaT.getCinemaAddress());
+        cinemaPartVO.setCinemaId(mtimeCinemaT.getUuid());
+        cinemaPartVO.setCinemaName(mtimeCinemaT.getCinemaName());
+        cinemaPartVO.setImgAddress(mtimeCinemaT.getImgAddress());
+        return cinemaPartVO;
+    }
+
     /**
      *
      * @param mtimeCinemaTS

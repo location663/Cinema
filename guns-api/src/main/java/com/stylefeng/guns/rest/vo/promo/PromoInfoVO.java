@@ -2,8 +2,10 @@ package com.stylefeng.guns.rest.vo.promo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class PromoInfoVO {
+public class PromoInfoVO implements Serializable {
     private String cinemaAddress;
     private Integer cinemaId;
     private String cinameName;
