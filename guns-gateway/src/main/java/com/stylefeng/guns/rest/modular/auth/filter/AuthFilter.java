@@ -25,8 +25,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class AuthFilter extends OncePerRequestFilter {
 
-
-
     @Autowired
     private JwtProperties jwtProperties;
 
