@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.core.support.HttpKit;
+import com.stylefeng.guns.rest.bean.PromoProducer;
 import com.stylefeng.guns.rest.common.exception.CinemaException;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimePromoMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimePromoOrderMapper;
@@ -40,7 +41,6 @@ import java.util.concurrent.TimeUnit;
 @Service(interfaceClass = PromoService.class)
 public class PromoServiceImpl implements PromoService {
 
-
     @Reference(interfaceClass = CinemaService.class, check = false)
     private CinemaService cinemaService;
 
@@ -56,6 +56,15 @@ public class PromoServiceImpl implements PromoService {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private PromoProducer producer;
+
+    /**
+     * 获取秒杀活动的分页信息
+     * @param cinemaGetCinemasVO
+     * @return
+     * @throws CinemaParameterException
+     */
     @Override
     public BaseResponVO getPromo(CinemaGetCinemasVO cinemaGetCinemasVO) throws CinemaParameterException {
 
@@ -96,6 +105,15 @@ public class PromoServiceImpl implements PromoService {
             promoInfoVO.setEndTime(TransferUtils.parseDate2String(mtimePromo.getEndTime()));
             promoInfoVO.setStatus(mtimePromo.getStatus());
             promoInfoVOS.add(promoInfoVO);
+            EntityWrapper<MtimePromoStock> promoStockEntityWrapper = new EntityWrapper<>();
+            promoStockEntityWrapper.eq("promo_id", mtimePromo.getUuid());
+            List<MtimePromoStock> mtimePromoStocks = promoStockMapper.selectList(promoStockEntityWrapper);
+            if (mtimePromoStocks.isEmpty()) {
+                throw new CinemaParameterException();
+            }
+            MtimePromoStock mtimePromoStock = mtimePromoStocks.get(0);
+            promoInfoVO.setStock(mtimePromoStock.getStock());
+            promoInfoVO.setUuid(mtimePromo.getUuid());
         }
         BaseResponVO baseResponVO = new BaseResponVO();
         baseResponVO.setData(promoInfoVOS);
@@ -103,6 +121,10 @@ public class PromoServiceImpl implements PromoService {
         return baseResponVO;
     }
 
+    /**
+     * 将数据库中的秒杀库存缓存到redis
+     * @return
+     */
     @Override
     public BaseResponVO publishPromoStock() {
         EntityWrapper<MtimePromo> promoEntityWrapper = new EntityWrapper<>();
@@ -121,8 +143,8 @@ public class PromoServiceImpl implements PromoService {
                 }
                 MtimePromoStock mtimePromoStock = mtimePromoStocks.get(0);
                 Integer promoId = mtimePromoStock.getPromoId();
-                Object o = redisTemplate.opsForValue().get("promoId" + promoId.toString());
-                if (null == o){
+                Integer stock = (Integer) redisTemplate.opsForValue().get("promoId" + promoId.toString());
+                if (null == stock){
                     redisTemplate.opsForValue().set("promoId" + promoId.toString(), mtimePromoStock.getStock());
                     redisTemplate.expire("promoId" + promoId.toString(), 30, TimeUnit.DAYS);
                 }
@@ -135,6 +157,12 @@ public class PromoServiceImpl implements PromoService {
         return baseResponVO;
     }
 
+    /**
+     * 创建秒杀订单
+     * @param promoOrder
+     * @return
+     * @throws CinemaException
+     */
     @Override
     @Transactional
     public BaseResponVO createOrder(PromoOrder promoOrder) throws CinemaException {
@@ -157,7 +185,23 @@ public class PromoServiceImpl implements PromoService {
 //            throw new CinemaException(1, "库存不足");
 //        }
 
+        /**
+         * 在redis中扣减库存
+         */
+        Integer stock = (Integer) redisTemplate.opsForValue().get("promoId" + promoOrder.getPromoId().toString());
+        if (null == stock){
+            publishPromoStock();
+        }
+        if (stock < promoOrder.getAmount()){
+            throw new CinemaException(1, "库存不足");
+        }
+        redisTemplate.opsForValue().set("promoId" + promoOrder.getPromoId().toString(), stock - promoOrder.getAmount());
+        redisTemplate.expire("promoId" + promoOrder.getPromoId().toString(), 30, TimeUnit.DAYS);
 
+        /**
+         * 发出消息，扣减mysql的库存
+         */
+        producer.decreaseStock(promoOrder.getPromoId(), promoOrder.getAmount());
 
         UserVO user = (UserVO) redisTemplate.opsForValue().get(token);
         MtimePromoOrder mtimePromoOrder = new MtimePromoOrder();
@@ -172,8 +216,6 @@ public class PromoServiceImpl implements PromoService {
         mtimePromoOrder.setCreateTime(new Date());
         mtimePromoOrder.setEndTime(mtimePromo.getEndTime());
         Integer insert = promoOrderMapper.insert(mtimePromoOrder);
-
-
 
         if (insert == 1){
             return new BaseResponVO(0, "下单成功");

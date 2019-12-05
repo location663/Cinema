@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class PromoInfoVO implements Serializable {
     private String cinemaAddress;
     private Integer cinemaId;
-    private String cinameName;
+    private String cinemaName;
     private String description;
     private String startTime;
     private String endTime;
