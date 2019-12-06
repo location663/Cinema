@@ -13,5 +13,5 @@ import java.io.Serializable;
 public class YearVo implements Serializable {
     private String yearId;
     private String yearName;
-    private boolean isAcboolean;
+    private boolean active;
 }

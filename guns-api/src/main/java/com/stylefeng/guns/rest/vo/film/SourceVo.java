@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 @Data
 public class SourceVo implements Serializable {
-    private String souceId;
+    private String sourceId;
     private String sourceName;
-    private boolean isAcboolean;
+    private boolean active;
 }

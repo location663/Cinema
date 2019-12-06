@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimePromoStockMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MtimePromoStock;
+import com.stylefeng.guns.rest.service.PromoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
@@ -35,6 +36,9 @@ public class PromoStockConsumer {
     @Autowired
     private MtimePromoStockMapper promoStockMapper;
 
+    @Autowired
+    private PromoService promoService;
+
     @PostConstruct
     public void init() throws MQClientException {
         consumer = new DefaultMQPushConsumer("promo");
@@ -52,14 +56,15 @@ public class PromoStockConsumer {
                 HashMap hashMap = JSON.parseObject(s, HashMap.class);
                 Integer promoId = (Integer) hashMap.get("promoId");
                 Integer amount = (Integer) hashMap.get("amount");
-                EntityWrapper<MtimePromoStock> mtimePromoStockEntityWrapper = new EntityWrapper<>();
-                mtimePromoStockEntityWrapper.eq("promo_id", promoId);
-                List<MtimePromoStock> mtimePromoStocks = promoStockMapper.selectList(mtimePromoStockEntityWrapper);
-                MtimePromoStock mtimePromoStock = mtimePromoStocks.get(0);
+//                EntityWrapper<MtimePromoStock> mtimePromoStockEntityWrapper = new EntityWrapper<>();
+//                mtimePromoStockEntityWrapper.eq("promo_id", promoId);
+//                List<MtimePromoStock> mtimePromoStocks = promoStockMapper.selectList(mtimePromoStockEntityWrapper);
+//                MtimePromoStock mtimePromoStock = mtimePromoStocks.get(0);
 //                mtimePromoStock.setStock(mtimePromoStock.getStock() - amount);
 //                Integer integer = promoStockMapper.updateById(mtimePromoStock);
-                Integer stock = mtimePromoStock.getStock();
-                Integer integer = promoStockMapper.updateStockByPromoId(stock - amount, promoId);
+//                Integer stock = mtimePromoStock.getStock();
+//                Integer integer = promoStockMapper.updateStockByPromoId(stock - amount, promoId);
+                Integer integer = promoService.updateStockByPromoId(promoId, amount);
                 if (integer == 1) {
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 }

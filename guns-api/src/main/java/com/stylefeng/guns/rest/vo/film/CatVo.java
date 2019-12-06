@@ -12,5 +12,5 @@ import java.io.Serializable;
 public class CatVo implements Serializable {
     private Integer catId;
     private String catName;
-    private boolean isAcboolean;
+    private boolean active;
 }

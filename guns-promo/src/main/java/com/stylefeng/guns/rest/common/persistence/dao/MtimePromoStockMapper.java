@@ -14,6 +14,6 @@ import org.apache.ibatis.annotations.Update;
  * @since 2019-12-03
  */
 public interface MtimePromoStockMapper extends BaseMapper<MtimePromoStock> {
-    @Update("UPDATE mtime_promo_stock SET stock = #{stock} WHERE promo_id = #{promoId} ")
-    public Integer updateStockByPromoId(@Param("stock") Integer stock, @Param("promoId") Integer promoId);
+    @Update("UPDATE mtime_promo_stock SET stock = stock - #{amount} WHERE promo_id = #{promoId} ")
+    public Integer updateStockByPromoId(@Param("amount") Integer amount, @Param("promoId") Integer promoId);
 }

@@ -12,4 +12,16 @@ public interface PromoService {
     BaseResponVO publishPromoStock();
 
     BaseResponVO createOrder(PromoOrder promoOrder) throws CinemaException;
+
+    Boolean insertOrderInTransaction(Integer promoId, Integer amount, Integer userId, String stockLogId);
+
+    String insertStockLog(Integer promoId, Integer stock);
+
+    Boolean createOrder4Producer(Integer promoId, Integer amount, Integer userId, String stockLogId) throws CinemaException;
+
+    Integer getStockLogStatusByUuid(String uuid);
+
+    Integer updateStockByPromoId(Integer promoId, Integer amount);
+
+    Integer getPromoStatusById(Integer promoId);
 }

@@ -39,5 +39,7 @@ logging:
 mq:
   topic-stock: promo-stock
   topic-order-status: order-status
+  topic-promo_transaction: promo-transaction
+  group-producer: promo-producer
   nameserver:
     addr: localhost:9876

@@ -12,4 +12,5 @@ public class PromoOrder implements Serializable {
     @Min(value = 1)
     private Integer amount;
     private String promoToken;
+    private String token;
 }

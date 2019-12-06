@@ -11,6 +11,7 @@ import com.stylefeng.guns.rest.vo.film.FilmIndexVo;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -54,11 +55,13 @@ public class FilmController {
 
 
     @RequestMapping("getConditionList")
-    public BaseResponVO getConditionList(){
+    public BaseResponVO getConditionList(@RequestParam(value = "catId", required = true) Integer catId,
+                                         @RequestParam(value = "sourceId", required = true) Integer sourceId,
+                                         @RequestParam(value = "yearId", required = true) Integer yearId){
         FilmConditionVo conditionVo = new FilmConditionVo();
-        conditionVo.setCatInfo(filmService.getCats());
-        conditionVo.setSourceInfo(filmService.getSources());
-        conditionVo.setYearInfo(filmService.getYears());
+        conditionVo.setCatInfo(filmService.getCats(catId));
+        conditionVo.setSourceInfo(filmService.getSources(sourceId));
+        conditionVo.setYearInfo(filmService.getYears(yearId));
         BaseResponVO baseResponVO = new BaseResponVO();
         baseResponVO.setData(conditionVo);
         baseResponVO.setStatus(0);

@@ -148,39 +148,48 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<CatVo> getCats() {
+    public List<CatVo> getCats(Integer catId) {
         List<CatVo> cats = new ArrayList<>();
         List<MtimeCatDictT> catDictTS = catDictTMapper.selectList(null);
         for (MtimeCatDictT catDictT : catDictTS) {
             CatVo catVo = new CatVo();
             catVo.setCatId(catDictT.getUuid());
             catVo.setCatName(catDictT.getShowName());
+            if (catDictT.getUuid() == catId){
+                catVo.setActive(true);
+            }
             cats.add(catVo);
         }
         return cats;
     }
 
     @Override
-    public List<SourceVo> getSources() {
+    public List<SourceVo> getSources(Integer sourceId) {
         List<SourceVo> sources = new ArrayList<>();
         List<MtimeSourceDictT> sourceDictTS = sourceDictTMapper.selectList(null);
         for (MtimeSourceDictT sourceDictT : sourceDictTS) {
             SourceVo sourceVo = new SourceVo();
             sourceVo.setSourceName(sourceDictT.getShowName());
-            sourceVo.setSouceId(sourceDictT.getUuid()+"");
+            sourceVo.setSourceId(sourceDictT.getUuid()+"");
+            if (sourceDictT.getUuid() == sourceId){
+                sourceVo.setActive(true);
+            }
             sources.add(sourceVo);
         }
         return sources;
     }
 
     @Override
-    public List<YearVo> getYears() {
-       List<YearVo> years=new ArrayList<>();
+    public List<YearVo> getYears(Integer yearId) {
+        List<YearVo> years=new ArrayList<>();
         List<MtimeYearDictT> yearDictTS = yearDictTMapper.selectList(null);
         for (MtimeYearDictT yearDictT : yearDictTS) {
             YearVo yearVo = new YearVo();
             yearVo.setYearName(yearDictT.getShowName());
             yearVo.setYearId(yearDictT.getUuid()+"");
+            if (yearDictT.getUuid() == yearId){
+                yearVo.setActive(true);
+            }
             years.add(yearVo);
         }
         return years;

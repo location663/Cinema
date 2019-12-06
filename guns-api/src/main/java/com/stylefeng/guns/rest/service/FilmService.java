@@ -19,9 +19,12 @@ public interface FilmService {
     List<FilmInfo> getBoxRanking();
     List<FilmInfo> getExpectRanking();
     List<FilmInfo> getTop();
-    List<CatVo> getCats();
-    List<SourceVo> getSources();
-    List<YearVo> getYears();
+
+    List<CatVo> getCats(Integer catId);
+
+    List<SourceVo> getSources(Integer sourceId);
+
+    List<YearVo> getYears(Integer yearId);
 
     FilmForCinema getFilmByFilmId(Integer filmId);
 
