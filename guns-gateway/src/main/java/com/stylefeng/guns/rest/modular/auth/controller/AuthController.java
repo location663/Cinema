@@ -3,6 +3,8 @@ package com.stylefeng.guns.rest.modular.auth.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
+import com.stylefeng.guns.rest.common.exception.CinemaException;
+import com.stylefeng.guns.rest.exception.CinemaExceptionEnum;
 import com.stylefeng.guns.rest.modular.auth.controller.dto.AuthRequest;
 import com.stylefeng.guns.rest.modular.auth.controller.dto.AuthResponse;
 import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
@@ -43,18 +45,14 @@ public class AuthController {
     private RedisTemplate redisTemplate;
 
     @RequestMapping(value = "${jwt.auth-path}")
-    public BaseResponVO createAuthenticationToken(AuthRequest authRequest) {
-
-
-
+    public BaseResponVO createAuthenticationToken(AuthRequest authRequest) throws CinemaException {
 
         UserVO userVO = userService.auth(authRequest.getUserName(),authRequest.getPassword());
 
         if (userVO == null){
-
-            throw new GunsException(BizExceptionEnum.AUTH_REQUEST_ERROR);
+            throw new CinemaException(1, "请先登录");
         }
-
+        // 在redis中存键值对，key为用户名, value为身份令牌
         String oldToken = (String) redisTemplate.opsForValue().get(userVO.getUserName());
         if (oldToken != null){
             redisTemplate.opsForValue().set(oldToken,null);
